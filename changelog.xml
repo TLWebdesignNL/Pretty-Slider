@@ -1,0 +1,10 @@
+<changelogs>
+    <changelog>
+        <element>mod_prettyslider</element>
+        <type>module</type>
+        <version>1.0.0</version>
+        <addition>
+            <item>First release of Pretty Slider.</item>
+        </addition>
+    </changelog>
+</changelogs>

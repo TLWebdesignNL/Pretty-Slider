@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" client="site" method="upgrade">
+    <name>MOD_PRETTYSLIDER</name>
+    <creationDate>2024-</creationDate>
+    <author>Tom van der Laan</author>
+    <authorEmail>info@tlwebdesign.nl</authorEmail>
+    <authorUrl>https://tlwebdesign.nl</authorUrl>
+    <copyright>TLWebdesign</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <version>1.0.0</version>
+    <description>MOD_PRETTYSLIDER_XML_DESCRIPTION</description>
+    <scriptfile>script.php</scriptfile>
+    <namespace path="src">TLWeb\Module\Prettyslider</namespace>
+    <files>
+        <folder module="mod_prettyslider">services</folder>
+        <folder>src</folder>
+        <folder>tmpl</folder>
+        <folder>language</folder>
+    </files>
+    <media folder="media" destination="mod_prettyslider">
+        <filename>logo.svg</filename>
+    </media>
+    <config>
+        <fields name="params">
+            <fieldset name="basic">
+                <field
+                        name="logo"
+                        type="note"
+                        description="MOD_PRETTYSLIDER_FIELD_LOGO_DESC"
+                />
+                <field
+                        name="ownerinfo"
+                        type="note"
+                        description="MOD_PRETTYSLIDER_FIELD_OWNERINFO_DESC"
+                />
+                <field
+                        name="info"
+                        type="note"
+                        description="MOD_PRETTYSLIDER_FIELD_INFO_DESC"
+                />
+            </fieldset>
+            <fieldset name="settings" label="MOD_PRETTYSLIDER_FIELDSET_SETTINGS_LABEL">
+                <field
+                        name="desclength"
+                        type="number"
+                        label="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_DESC"
+                        default="40"
+                        min="1"
+                        max="255"
+                        step="1"
+                />
+                <field
+                        name="minheight"
+                        type="number"
+                        label="MOD_PRETTYSLIDER_FIELD_MINHEIGHT_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_MINHEIGHT_DESC"
+                        default="0"
+                        min="0"
+                        max="100"
+                        step="1"
+                        required="false"
+                />
+                <field
+                        name="maxheight"
+                        type="number"
+                        label="MOD_PRETTYSLIDER_FIELD_MAXHEIGHT_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_MAXHEIGHT_DESC"
+                        default="0"
+                        min="0"
+                        max="800"
+                        step="1"
+                        required="false"
+                />
+
+                <field
+                        name="descsource"
+                        type="list"
+                        label="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_DESC"
+                >
+                    <option value="title" checked="true">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_ARTICLE</option>
+                    <option value="imagealt">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGEALT</option>
+                    <option value="imagecaption">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGECAPTION</option>
+                </field>
+                <field
+                        name="imagepriority"
+                        type="radio"
+                        default="intro"
+                        label="MOD_PRETTYSLIDER_FIELD_IMAGEPRIORITY_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_IMAGEPRIORITY_DESC"
+                        class="btn-group"
+                        required="true"
+                >
+                    <option value="intro">MOD_PRETTYSLIDER_INTROIMAGE</option>
+                    <option value="full">MOD_PRETTYSLIDER_FULLIMAGE</option>
+                </field>
+                <field
+                        name="catid"
+                        type="category"
+                        label="JCATEGORY"
+                        extension="com_content"
+                        multiple="true"
+                        layout="joomla.form.field.list-fancy-select"
+                        filter="intarray"
+                        class="multipleCategories"
+                />
+                <field
+                        name="article_ordering"
+                        type="list"
+                        label="MOD_ARTICLES_CATEGORY_FIELD_ARTICLEORDERING_LABEL"
+                        default="a.title"
+                        validate="options"
+                >
+                    <option value="a.ordering">MOD_ARTICLES_CATEGORY_OPTION_ORDERING_VALUE</option>
+                    <option value="fp.ordering">MOD_ARTICLES_CATEGORY_OPTION_ORDERINGFEATURED_VALUE</option>
+                    <option value="a.hits" requires="hits">MOD_ARTICLES_CATEGORY_OPTION_HITS_VALUE</option>
+                    <option value="a.title">JGLOBAL_TITLE</option>
+                    <option value="a.id">MOD_ARTICLES_CATEGORY_OPTION_ID_VALUE</option>
+                    <option value="a.alias">JFIELD_ALIAS_LABEL</option>
+                    <option value="a.created">MOD_ARTICLES_CATEGORY_OPTION_CREATED_VALUE</option>
+                    <option value="modified">MOD_ARTICLES_CATEGORY_OPTION_MODIFIED_VALUE</option>
+                    <option value="publish_up">MOD_ARTICLES_CATEGORY_OPTION_STARTPUBLISHING_VALUE</option>
+                    <option value="a.publish_down">MOD_ARTICLES_CATEGORY_OPTION_FINISHPUBLISHING_VALUE</option>
+                    <option value="random">MOD_ARTICLES_CATEGORY_OPTION_RANDOM_VALUE</option>
+                    <option value="rating_count" requires="vote">MOD_ARTICLES_CATEGORY_OPTION_VOTE_VALUE</option>
+                    <option value="rating" requires="vote">MOD_ARTICLES_CATEGORY_OPTION_RATING_VALUE</option>
+                </field>
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                        name="layout"
+                        type="modulelayout"
+                        label="JFIELD_ALT_LAYOUT_LABEL"
+                        class="form-select"
+                        validate="moduleLayout"
+                />
+
+                <field
+                        name="moduleclass_sfx"
+                        type="textarea"
+                        label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+                        rows="3"
+                        validate="CssIdentifier"
+                />
+
+                <field
+                        name="cache"
+                        type="list"
+                        label="COM_MODULES_FIELD_CACHING_LABEL"
+                        default="1"
+                        filter="integer"
+                        validate="options"
+                >
+                    <option value="1">JGLOBAL_USE_GLOBAL</option>
+                    <option value="0">COM_MODULES_FIELD_VALUE_NOCACHING</option>
+                </field>
+                <field
+                        name="cache_time"
+                        type="number"
+                        label="COM_MODULES_FIELD_CACHE_TIME_LABEL"
+                        default="900"
+                        filter="integer"
+                />
+                <field
+                        name="cachemode"
+                        type="hidden"
+                        default="static"
+                >
+                    <option value="static"></option>
+                </field>
+            </fieldset>
+
+        </fields>
+    </config>
+    <updateservers>
+        <server type="extension" priority="2" name="Pretty Slider Updates">
+            https://raw.githubusercontent.com/TLWebdesign/Pretty-Slider/main/updates.xml
+        </server>
+    </updateservers>
+    <changelogurl>https://raw.githubusercontent.com/TLWebdesign/Pretty-Slider/main/changelog.xml</changelogurl>
+</extension>
