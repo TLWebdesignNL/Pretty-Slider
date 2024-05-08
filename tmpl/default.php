@@ -18,27 +18,27 @@ $maxHeight = $params->get('maxheight', 0);
 ?>
 <div class="pretty-slider">
     <?php
-    foreach ($slides as $slide) : ?>
-        <?php
+    foreach ($slides as $slide) :
+        $slide->images->image_intro = HTMLHelper::_('cleanImageURL', $slide->images->image_intro);
+        $slide->images->image_fulltext = HTMLHelper::_('cleanImageURL', $slide->images->image_fulltext);
+
         if ($slide->image->url != "") :
-            $width = $slide->image->attributes['width'];
-            $height = $slide->image->attributes['height'];
+            $width = $slide->images->image_intro->attributes['width'];
+            $height = $slide->images->image_intro->attributes['height'];
             $aspectRatio = 0.25;
 
             if ($width != 0 && $height != 0) {
                 $aspectRatio = $height / $width;
-            }
-            ?>
+            } ?>
             <div class="ratio d-flex justify-content-center align-items-center p-3 p-sm-5"
                  style="
                          --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
-                         background:url('<?php echo $slide->image->url; ?>') center center / cover no-repeat;
+                         background:url('/<?php echo $slide->images->image_intro->url; ?>') center center / cover no-repeat;
                          <?php echo ($minHeight) ? "min-height: " . $minHeight . "px;" : ""; ?>
                          <?php echo ($maxHeight) ? "max-height: " . $maxHeight . "px;" : ""; ?>
                          ">
                 <div
-                        class="content d-flex flex-column align-items-<?php
-                        echo $slide['position']; ?>
+                        class="content d-flex flex-column align-items-center
                         w-auto h-auto position-relative text-white text-center"
                 >
                     <div class="h3 title">

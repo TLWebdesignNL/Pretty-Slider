@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-namespace TlwebNamespace\Module\Prettyslider\Site\Helper;
+namespace TLWeb\Module\Prettyslider\Site\Helper;
 
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Application\SiteApplication;
@@ -44,7 +44,7 @@ class PrettysliderHelper implements DatabaseAwareInterface
      * @since   1.0.0
      */
 
-    public function getSlider(Registry $params, SiteApplication $app): array
+    public function getSlides(Registry $params, SiteApplication $app): array
     {
         $slides = array();
 
