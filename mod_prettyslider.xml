@@ -41,6 +41,16 @@
             </fieldset>
             <fieldset name="settings" label="MOD_PRETTYSLIDER_FIELDSET_SETTINGS_LABEL">
                 <field
+                        name="maxslides"
+                        type="number"
+                        label="MOD_PRETTYSLIDER_FIELD_MAXSLIDES_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_MAXSLIDES_DESC"
+                        default="5"
+                        min="1"
+                        max="20"
+                        step="1"
+                />
+                <field
                         name="desclength"
                         type="number"
                         label="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_LABEL"
@@ -71,6 +81,18 @@
                 >
                     <option value="intro">MOD_PRETTYSLIDER_INTROIMAGE</option>
                     <option value="fulltext">MOD_PRETTYSLIDER_FULLTEXTIMAGE</option>
+                </field>
+                <field
+                        name="autoplay"
+                        type="radio"
+                        default="1"
+                        layout="joomla.form.field.radio.switcher"
+                        label="MOD_PRETTYSLIDER_FIELD_AUTOPLAY_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_AUTOPLAY_DESC"
+                        required="true"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
                 </field>
                 <field
                         name="catid"

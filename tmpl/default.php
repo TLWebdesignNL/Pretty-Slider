@@ -17,11 +17,15 @@ HTMLHelper::_('bootstrap.carousel', 'prettySlider' . $module->id);
 HTMLHelper::_('bootstrap.carousel', 'prettySliderCarousel' . $module->id);
 
 $slideCounter = 0;
-
+$autoPlay = $params->get("autoplay", null);
 ?>
 <div class="prettySliderWrapper">
-    <div id="prettySliderCarousel<?php
-    echo $module->id; ?>" class="carousel slide" data-bs-ride="carousel" style="max-height">
+    <div id="prettySliderCarousel<?php echo $module->id; ?>"
+         class="carousel slide"
+         <?php if (!empty($autoPlay)) : ?>
+            data-bs-ride="carousel"
+         <?php endif; ?>
+         style="max-height">
         <div class="carousel-inner">
             <?php
             foreach ($slides as $slide) :

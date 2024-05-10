@@ -64,7 +64,7 @@ class PrettysliderHelper implements DatabaseAwareInterface
         $articles->setState('filter.published', ContentComponent::CONDITION_PUBLISHED);
 
         // Set the filters based on the module params
-        $articles->setState('list.limit', (int) $params->get('count', 0));
+        $articles->setState('list.limit', (int) $params->get('maxslides', 5));
 
         // Access filter
         $access     = !ComponentHelper::getParams('com_content')->get('show_noauth');
@@ -111,6 +111,7 @@ class PrettysliderHelper implements DatabaseAwareInterface
                 return !is_null($value);
             });
 
+            // check if there is an image url, else we don't add the article to the slides
             if ($isImage) {
                 $slide = new \stdClass();
 
