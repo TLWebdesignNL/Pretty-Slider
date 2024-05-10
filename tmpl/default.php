@@ -14,7 +14,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
-HTMLHelper::_('bootstrap.carousel', 'prettySlider' . $module->id);
 HTMLHelper::_('bootstrap.carousel', 'prettySliderCarousel' . $module->id);
 
 $slideCounter = 0;
