@@ -12,6 +12,7 @@
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::_('bootstrap.carousel', 'prettySlider' . $module->id);
 HTMLHelper::_('bootstrap.carousel', 'prettySliderCarousel' . $module->id);
@@ -34,8 +35,8 @@ $autoPlay = $params->get("autoplay", null);
                 echo ($slideCounter == 0) ? 'active' : ''; ?>"
                      style="flex: 0 0 100%;">
                     <div class="w-100 h-100">
-                        <img src="/<?php
-                        echo $slide->image->url; ?>"
+                        <img src="<?php
+                        echo Uri::root() . $slide->image->url; ?>"
                              class="w-100 h-auto"
                              width="<?php
                                 echo $slide->image->width; ?>"
