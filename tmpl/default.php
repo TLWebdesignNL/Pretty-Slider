@@ -40,7 +40,7 @@ $autoPlay = $params->get("autoplay", null);
                              width="<?php
                                 echo $slide->image->width; ?>"
                              height="<?php
-                                echo $slide->image->width; ?>"
+                                echo $slide->image->height; ?>"
                         >
                         <div class="carousel-caption d-none d-md-block">
                             <h5>

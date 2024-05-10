@@ -127,8 +127,8 @@ class PrettysliderHelper implements DatabaseAwareInterface
                 //  create image data based on priority
                 $image          = new \stdClass();
                 $imageUrlKey = 'image_' . $imagePriority;
-                $imageCaptionKey = 'image_' . $imagePriority . '_alt';
-                $imageAltKey = 'image_' . $imagePriority  . '_caption';
+                $imageCaptionKey = 'image_' . $imagePriority . '_caption';
+                $imageAltKey = 'image_' . $imagePriority  . '_alt';
                 $cleanImageUrl = HTMLHelper::_('cleanImageURL', $images->{$imageUrlKey});
                 $image->url   = $cleanImageUrl->url;
                 $image->height = $cleanImageUrl->attributes['height'];
