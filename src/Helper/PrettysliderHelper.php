@@ -21,6 +21,9 @@ use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseAwareInterface;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Registry\Registry;
+use Joomla\CMS\HTML\Helpers\StringHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+
 
 \defined('_JEXEC') or die;
 
@@ -98,31 +101,85 @@ class PrettysliderHelper implements DatabaseAwareInterface
         $items = $articles->getItems();
 
         foreach ($items as &$item) {
-            $slide = new \stdClass();
+            $images           = json_decode($item->images);
+            $imagesProperties = get_object_vars($images);
+            $imageUrlExists['intro']   = (!empty($images->image_intro)) ?? null;
+            $imageUrlExists['fulltext']   = (!empty($images->image_fulltext)) ?? null;
 
-            $item->slug = $item->id . ':' . $item->alias;
-            $slide->title = $item->title;
-            $slide->images = json_decode($item->images);
-            $slide->description = $item->introtext;
+            // check that there is an image
+            $isImage = array_filter($imageUrlExists, function ($value) {
+                return !is_null($value);
+            });
 
-            if ($access || \in_array($item->access, $authorised)) {
-                // We know that user has the privilege to view the article
-                $slide->link = Route::_(RouteHelper::getArticleRoute($item->slug, $item->catid, $item->language));
-            } else {
-                $input     = $app->getInput();
-                $menu      = $app->getMenu();
-                $menuitems = $menu->getItems('link', 'index.php?option=com_users&view=login');
+            if ($isImage) {
+                $slide = new \stdClass();
 
-                if (isset($menuitems[0])) {
-                    $Itemid = $menuitems[0]->id;
-                } elseif ($input->getInt('Itemid') > 0) {
-                    // Use Itemid from requesting page only if there is no existing menu
-                    $Itemid = $input->getInt('Itemid');
+                $slide->title = $item->title;
+                // get image priority
+                $imagePriority = $params->get("imagepriority", "intro");
+
+                // check if the image priority has a valid url else set the priority to the other option as fallback
+                if (!$imageUrlExists[$imagePriority]) {
+                    $imagePriority = array_key_first($imageUrlExists);
                 }
 
-                $slide->link = Route::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
+                //  create image data based on priority
+                $image          = new \stdClass();
+                $imageUrlKey = 'image_' . $imagePriority;
+                $imageCaptionKey = 'image_' . $imagePriority . '_alt';
+                $imageAltKey = 'image_' . $imagePriority  . '_caption';
+                $cleanImageUrl = HTMLHelper::_('cleanImageURL', $images->{$imageUrlKey});
+                $image->url   = $cleanImageUrl->url;
+                $image->height = $cleanImageUrl->attributes['height'];
+                $image->width = $cleanImageUrl->attributes['width'];
+                $image->caption = $images->{$imageCaptionKey};
+                $image->alt     = $images->{$imageAltKey};
+
+                // assign image variable to slide
+                $slide->image = $image;
+
+                switch ($params->get("descsource", "")) {
+                    case "articletext":
+                        $descriptionText = $item->introtext;
+                        break;
+                    case "imagealt":
+                        $descriptionText = $image->alt;
+                        break;
+                    case "imagecaption":
+                        $descriptionText = $image->caption;
+                        break;
+                    default:
+                        $descriptionText = "";
+                }
+                // define description based on settings
+                $slide->description = StringHelper::truncate(
+                    $descriptionText,
+                    $params->get("desclength", 50),
+                    true,
+                    false
+                );
+
+                // check if we have access to the article and then create a link
+                if ($access || \in_array($item->access, $authorised)) {
+                    // We know that user has the privilege to view the article
+                    $slide->link = Route::_(RouteHelper::getArticleRoute($item->id . ':' . $item->alias, $item->catid, $item->language));
+                } else {
+                    $input     = $app->getInput();
+                    $menu      = $app->getMenu();
+                    $menuitems = $menu->getItems('link', 'index.php?option=com_users&view=login');
+
+                    if (isset($menuitems[0])) {
+                        $Itemid = $menuitems[0]->id;
+                    } elseif ($input->getInt('Itemid') > 0) {
+                        // Use Itemid from requesting page only if there is no existing menu
+                        $Itemid = $input->getInt('Itemid');
+                    }
+
+                    $slide->link = Route::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
+                }
+
+                $slides[] = $slide;
             }
-            $slides[] = $slide;
         }
 
         return $slides;

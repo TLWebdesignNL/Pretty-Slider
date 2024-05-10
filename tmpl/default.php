@@ -11,60 +11,71 @@
 \defined('_JEXEC') or die;
 
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
-$minHeight = $params->get('minheight', 0);
-$maxHeight = $params->get('maxheight', 0);
+HTMLHelper::_('bootstrap.carousel', 'prettySlider' . $module->id);
+HTMLHelper::_('bootstrap.carousel', 'prettySliderCarousel' . $module->id);
+
+$slideCounter = 0;
 
 ?>
-<div class="pretty-slider">
-    <?php
-    foreach ($slides as $slide) :
-        $slide->images->image_intro = HTMLHelper::_('cleanImageURL', $slide->images->image_intro);
-        $slide->images->image_fulltext = HTMLHelper::_('cleanImageURL', $slide->images->image_fulltext);
-
-        if ($slide->image->url != "") :
-            $width = $slide->images->image_intro->attributes['width'];
-            $height = $slide->images->image_intro->attributes['height'];
-            $aspectRatio = 0.25;
-
-            if ($width != 0 && $height != 0) {
-                $aspectRatio = $height / $width;
-            } ?>
-            <div class="ratio d-flex justify-content-center align-items-center p-3 p-sm-5"
-                 style="
-                         --aspect-ratio: <?php echo round($aspectRatio * 100); ?>%;
-                         background:url('/<?php echo $slide->images->image_intro->url; ?>') center center / cover no-repeat;
-                         <?php echo ($minHeight) ? "min-height: " . $minHeight . "px;" : ""; ?>
-                         <?php echo ($maxHeight) ? "max-height: " . $maxHeight . "px;" : ""; ?>
-                         ">
-                <div
-                        class="content d-flex flex-column align-items-center
-                        w-auto h-auto position-relative text-white text-center"
-                >
-                    <div class="h3 title">
-                        <span class=""
-                              style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
+<div class="prettySliderWrapper">
+    <div id="prettySliderCarousel<?php
+    echo $module->id; ?>" class="carousel slide" data-bs-ride="carousel" style="max-height">
+        <div class="carousel-inner">
+            <?php
+            foreach ($slides as $slide) :
+                ?>
+                <div class="carousel-item <?php
+                echo ($slideCounter == 0) ? 'active' : ''; ?>"
+                     style="flex: 0 0 100%;">
+                    <div class="w-100 h-100">
+                        <img src="/<?php
+                        echo $slide->image->url; ?>"
+                             class="w-100 h-auto"
+                             width="<?php
+                                echo $slide->image->width; ?>"
+                             height="<?php
+                                echo $slide->image->width; ?>"
                         >
-                            <?php
-                            echo $slide->title; ?>
-                        </span>
-                    </div>
-                    <?php
-                    if (!empty($slide->description)) : ?>
-                        <div class="description mt-sm-2">
-                            <span class=""
-                                  style="-webkit-box-decoration-break:clone;box-decoration-break:clone;"
-                            >
-                                <?php
-                                echo $slide->description; ?>
-                            </span>
+                        <div class="carousel-caption d-none d-md-block">
+                            <h5>
+                                <a href="<?php
+                                echo $slide->link; ?>" class="text-white">
+                                    <?php
+                                    echo $slide->title; ?>
+                                </a>
+                            </h5>
+                            <p><?php
+                                echo $slide->description; ?></p>
                         </div>
-                    <?php
-                    endif; ?>
+                    </div>
                 </div>
-            </div>
-        <?php
-        endif; ?>
-    <?php
-    endforeach; ?>
+                <?php
+                $slideCounter++; ?>
+            <?php
+            endforeach; ?>
+        </div>
+        <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#prettySliderCarousel<?php
+                echo $module->id; ?>"
+                data-bs-slide="prev"
+        >
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden"><?php
+                echo Text::_('JPREVIOUS'); ?></span>
+        </button>
+        <button class="carousel-control-next"
+                type="button"
+                data-bs-target="#prettySliderCarousel<?php
+                echo $module->id; ?>"
+                data-bs-slide="next"
+        >
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden"><?php
+                echo Text::_('JNEXT'); ?></span>
+        </button>
+    </div>
 </div>

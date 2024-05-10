@@ -51,35 +51,12 @@
                         step="1"
                 />
                 <field
-                        name="minheight"
-                        type="number"
-                        label="MOD_PRETTYSLIDER_FIELD_MINHEIGHT_LABEL"
-                        description="MOD_PRETTYSLIDER_FIELD_MINHEIGHT_DESC"
-                        default="0"
-                        min="0"
-                        max="100"
-                        step="1"
-                        required="false"
-                />
-                <field
-                        name="maxheight"
-                        type="number"
-                        label="MOD_PRETTYSLIDER_FIELD_MAXHEIGHT_LABEL"
-                        description="MOD_PRETTYSLIDER_FIELD_MAXHEIGHT_DESC"
-                        default="0"
-                        min="0"
-                        max="800"
-                        step="1"
-                        required="false"
-                />
-
-                <field
                         name="descsource"
                         type="list"
                         label="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_DESC"
                 >
-                    <option value="title" checked="true">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_ARTICLE</option>
+                    <option value="articletext" checked="true">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_ARTICLE</option>
                     <option value="imagealt">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGEALT</option>
                     <option value="imagecaption">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGECAPTION</option>
                 </field>
@@ -93,7 +70,7 @@
                         required="true"
                 >
                     <option value="intro">MOD_PRETTYSLIDER_INTROIMAGE</option>
-                    <option value="full">MOD_PRETTYSLIDER_FULLIMAGE</option>
+                    <option value="fulltext">MOD_PRETTYSLIDER_FULLTEXTIMAGE</option>
                 </field>
                 <field
                         name="catid"
@@ -108,23 +85,20 @@
                 <field
                         name="article_ordering"
                         type="list"
-                        label="MOD_ARTICLES_CATEGORY_FIELD_ARTICLEORDERING_LABEL"
+                        label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERING_LABEL"
                         default="a.title"
                         validate="options"
                 >
-                    <option value="a.ordering">MOD_ARTICLES_CATEGORY_OPTION_ORDERING_VALUE</option>
-                    <option value="fp.ordering">MOD_ARTICLES_CATEGORY_OPTION_ORDERINGFEATURED_VALUE</option>
-                    <option value="a.hits" requires="hits">MOD_ARTICLES_CATEGORY_OPTION_HITS_VALUE</option>
+                    <option value="a.ordering">MOD_PRETTYSLIDER_CATEGORY_OPTION_ORDERING_VALUE</option>
+                    <option value="fp.ordering">MOD_PRETTYSLIDER_CATEGORY_OPTION_ORDERINGFEATURED_VALUE</option>
                     <option value="a.title">JGLOBAL_TITLE</option>
-                    <option value="a.id">MOD_ARTICLES_CATEGORY_OPTION_ID_VALUE</option>
+                    <option value="a.id">MOD_PRETTYSLIDER_CATEGORY_OPTION_ID_VALUE</option>
                     <option value="a.alias">JFIELD_ALIAS_LABEL</option>
-                    <option value="a.created">MOD_ARTICLES_CATEGORY_OPTION_CREATED_VALUE</option>
-                    <option value="modified">MOD_ARTICLES_CATEGORY_OPTION_MODIFIED_VALUE</option>
-                    <option value="publish_up">MOD_ARTICLES_CATEGORY_OPTION_STARTPUBLISHING_VALUE</option>
-                    <option value="a.publish_down">MOD_ARTICLES_CATEGORY_OPTION_FINISHPUBLISHING_VALUE</option>
-                    <option value="random">MOD_ARTICLES_CATEGORY_OPTION_RANDOM_VALUE</option>
-                    <option value="rating_count" requires="vote">MOD_ARTICLES_CATEGORY_OPTION_VOTE_VALUE</option>
-                    <option value="rating" requires="vote">MOD_ARTICLES_CATEGORY_OPTION_RATING_VALUE</option>
+                    <option value="a.created">MOD_PRETTYSLIDER_CATEGORY_OPTION_CREATED_VALUE</option>
+                    <option value="modified">MOD_PRETTYSLIDER_CATEGORY_OPTION_MODIFIED_VALUE</option>
+                    <option value="publish_up">MOD_PRETTYSLIDER_CATEGORY_OPTION_STARTPUBLISHING_VALUE</option>
+                    <option value="a.publish_down">MOD_PRETTYSLIDER_CATEGORY_OPTION_FINISHPUBLISHING_VALUE</option>
+                    <option value="random">MOD_PRETTYSLIDER_CATEGORY_OPTION_RANDOM_VALUE</option>
                 </field>
             </fieldset>
             <fieldset name="advanced">
