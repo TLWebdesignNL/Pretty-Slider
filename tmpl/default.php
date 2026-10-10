@@ -19,9 +19,11 @@ use Joomla\CMS\Language\Text;
  * @var  string     $sliderId
  * @var  string     $titleTag
  * @var  boolean    $autoplay
+ * @var  integer    $interval
  */
 
-HTMLHelper::_('bootstrap.carousel', 'prettySliderCarousel' . $module->id);
+// The rotation is started and stopped by the module script, so the visitor can pause it
+HTMLHelper::_('bootstrap.carousel', '#' . $sliderId, ['interval' => $interval, 'ride' => false, 'pause' => false]);
 
 $slideCount = count($slides);
 ?>
@@ -32,9 +34,21 @@ $slideCount = count($slides);
          aria-roledescription="<?php echo Text::_('MOD_PRETTYSLIDER_CAROUSEL'); ?>"
          aria-label="<?php echo htmlspecialchars($module->title, ENT_QUOTES, 'UTF-8'); ?>"
          <?php if ($autoplay) : ?>
-            data-bs-ride="carousel"
+            data-prettyslider
          <?php endif; ?>
          style="max-height">
+        <?php if ($autoplay) : ?>
+            <button class="prettyslider-toggle"
+                    type="button"
+                    hidden
+                    data-prettyslider-toggle
+                    data-label-pause="<?php echo Text::_('MOD_PRETTYSLIDER_PAUSE'); ?>"
+                    data-label-play="<?php echo Text::_('MOD_PRETTYSLIDER_PLAY'); ?>"
+                    aria-label="<?php echo Text::_('MOD_PRETTYSLIDER_PAUSE'); ?>"
+            >
+                <span class="prettyslider-toggle-icon" aria-hidden="true"></span>
+            </button>
+        <?php endif; ?>
         <div class="carousel-inner">
             <?php foreach ($slides as $index => $slide) : ?>
                 <div class="carousel-item<?php echo $index === 0 ? ' active' : ''; ?>"

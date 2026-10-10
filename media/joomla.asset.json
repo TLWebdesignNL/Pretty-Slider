@@ -1,0 +1,19 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "mod_prettyslider",
+  "description": "Pretty Slider module assets",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "mod_prettyslider.slider",
+      "type": "script",
+      "uri": "mod_prettyslider/prettyslider.js",
+      "dependencies": [
+        "bootstrap.carousel"
+      ],
+      "attributes": {
+        "type": "module"
+      }
+    }
+  ]
+}

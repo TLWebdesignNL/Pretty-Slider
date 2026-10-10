@@ -18,6 +18,8 @@
         <folder>language</folder>
     </files>
     <media folder="media" destination="mod_prettyslider">
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
         <filename>logo.svg</filename>
     </media>
     <config>
@@ -109,6 +111,18 @@
                     <option value="0">JNO</option>
                     <option value="1">JYES</option>
                 </field>
+                <field
+                        name="interval"
+                        type="number"
+                        label="MOD_PRETTYSLIDER_FIELD_INTERVAL_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_INTERVAL_DESC"
+                        default="5"
+                        min="2"
+                        max="60"
+                        step="1"
+                        filter="integer"
+                        showon="autoplay:1"
+                />
                 <field
                         name="catid"
                         type="category"

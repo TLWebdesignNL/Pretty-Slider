@@ -56,6 +56,13 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         $data['sliderId'] = 'prettySliderCarousel' . (int) $this->module->id;
         $data['titleTag'] = \in_array($titleTag, self::TITLE_TAGS, true) ? $titleTag : 'p';
         $data['autoplay'] = \count($slides) > 1 && (bool) $params->get('autoplay', 1);
+        $data['interval'] = min(60, max(2, (int) $params->get('interval', 5))) * 1000;
+
+        if ($data['autoplay']) {
+            $wa = $data['app']->getDocument()->getWebAssetManager();
+            $wa->getRegistry()->addExtensionRegistryFile('mod_prettyslider');
+            $wa->useScript('mod_prettyslider.slider');
+        }
 
         return $data;
     }
