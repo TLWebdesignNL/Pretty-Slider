@@ -3,6 +3,16 @@
     <changelog>
         <element>mod_prettyslider</element>
         <type>module</type>
+        <version>1.1.0</version>
+        <addition>
+            <item>Setting for the vertical position of the slide text: at the top, in the middle or at the bottom.</item>
+            <item>Setting for the horizontal alignment of the slide text: left, centre or right.</item>
+            <item>Setting to show or hide the dark gradient behind the slide text.</item>
+        </addition>
+    </changelog>
+    <changelog>
+        <element>mod_prettyslider</element>
+        <type>module</type>
         <version>1.0.0</version>
         <note>
             <item>Requires Joomla 5.4 or 6 and PHP 8.1 or later.</item>
