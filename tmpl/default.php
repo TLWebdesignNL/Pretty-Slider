@@ -20,6 +20,7 @@ use Joomla\CMS\Language\Text;
  * @var  string     $titleTag
  * @var  boolean    $autoplay
  * @var  integer    $interval
+ * @var  string     $moduleclassSfx
  */
 
 // The rotation is started and stopped by the module script, so the visitor can pause it
@@ -27,7 +28,7 @@ HTMLHelper::_('bootstrap.carousel', '#' . $sliderId, ['interval' => $interval, '
 
 $slideCount = count($slides);
 ?>
-<div class="mod-prettyslider prettySliderWrapper">
+<div class="mod-prettyslider prettySliderWrapper<?php echo $moduleclassSfx !== '' ? ' ' . htmlspecialchars($moduleclassSfx, ENT_QUOTES, 'UTF-8') : ''; ?>">
     <div id="<?php echo $sliderId; ?>"
          class="carousel slide"
          role="region"

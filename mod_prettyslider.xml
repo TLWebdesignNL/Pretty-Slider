@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
     <name>MOD_PRETTYSLIDER</name>
-    <creationDate>2024-</creationDate>
+    <creationDate>2026-10-10</creationDate>
     <author>Tom van der Laan</author>
     <authorEmail>info@tlwebdesign.nl</authorEmail>
     <authorUrl>https://tlwebdesign.nl</authorUrl>
@@ -52,6 +52,7 @@
                         min="1"
                         max="20"
                         step="1"
+                        filter="integer"
                 />
                 <field
                         name="desclength"
@@ -62,14 +63,17 @@
                         min="1"
                         max="255"
                         step="1"
+                        filter="integer"
                 />
                 <field
                         name="descsource"
                         type="list"
                         label="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_DESC"
+                        default="articletext"
+                        validate="options"
                 >
-                    <option value="articletext" checked="true">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_ARTICLE</option>
+                    <option value="articletext">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_ARTICLE</option>
                     <option value="imagealt">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGEALT</option>
                     <option value="imagecaption">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGECAPTION</option>
                 </field>
@@ -81,6 +85,7 @@
                         description="MOD_PRETTYSLIDER_FIELD_IMAGEPRIORITY_DESC"
                         class="btn-group"
                         required="true"
+                        validate="options"
                 >
                     <option value="intro">MOD_PRETTYSLIDER_INTROIMAGE</option>
                     <option value="fulltext">MOD_PRETTYSLIDER_FULLTEXTIMAGE</option>
@@ -108,6 +113,8 @@
                         label="MOD_PRETTYSLIDER_FIELD_AUTOPLAY_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_AUTOPLAY_DESC"
                         required="true"
+                        filter="integer"
+                        validate="options"
                 >
                     <option value="0">JNO</option>
                     <option value="1">JYES</option>
