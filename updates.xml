@@ -14,7 +14,7 @@
         <tags>
             <tag>stable</tag>
         </tags>
-        <sha256></sha256>
+        <sha256>a06c62d6526655b191a79775810da7bba5e9f3527f3104ef50c3c574a822eb69</sha256>
         <maintainer>TLWebdesign</maintainer>
         <maintainerurl>https://www.tlwebdesign.nl</maintainerurl>
         <infourl title="Pretty Slider changelog">https://github.com/TLWebdesignNL/Pretty-Slider/blob/main/changelog.xml</infourl>
