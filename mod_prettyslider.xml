@@ -42,7 +42,7 @@
                         description="MOD_PRETTYSLIDER_FIELD_INFO_DESC"
                 />
             </fieldset>
-            <fieldset name="settings" label="MOD_PRETTYSLIDER_FIELDSET_SETTINGS_LABEL">
+            <fieldset name="slides" label="MOD_PRETTYSLIDER_FIELDSET_SLIDES_LABEL">
                 <field
                         name="source"
                         type="radio"
@@ -153,6 +153,17 @@
                     </form>
                 </field>
                 <field
+                        name="catid"
+                        showon="source:articles"
+                        type="category"
+                        label="JCATEGORY"
+                        extension="com_content"
+                        multiple="true"
+                        layout="joomla.form.field.list-fancy-select"
+                        filter="intarray"
+                        class="multipleCategories"
+                />
+                <field
                         name="maxslides"
                         showon="source:articles"
                         type="number"
@@ -165,29 +176,34 @@
                         filter="integer"
                 />
                 <field
-                        name="desclength"
-                        showon="source:articles"
-                        type="number"
-                        label="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_LABEL"
-                        description="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_DESC"
-                        default="40"
-                        min="1"
-                        max="255"
-                        step="1"
-                        filter="integer"
-                />
-                <field
-                        name="descsource"
+                        name="article_ordering"
                         showon="source:articles"
                         type="list"
-                        label="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_LABEL"
-                        description="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_DESC"
-                        default="articletext"
+                        label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERING_LABEL"
+                        default="a.title"
                         validate="options"
                 >
-                    <option value="articletext">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_ARTICLE</option>
-                    <option value="imagealt">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGEALT</option>
-                    <option value="imagecaption">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGECAPTION</option>
+                    <option value="a.ordering">MOD_PRETTYSLIDER_CATEGORY_OPTION_ORDERING_VALUE</option>
+                    <option value="fp.ordering">MOD_PRETTYSLIDER_CATEGORY_OPTION_ORDERINGFEATURED_VALUE</option>
+                    <option value="a.title">JGLOBAL_TITLE</option>
+                    <option value="a.id">MOD_PRETTYSLIDER_CATEGORY_OPTION_ID_VALUE</option>
+                    <option value="a.alias">JFIELD_ALIAS_LABEL</option>
+                    <option value="a.created">MOD_PRETTYSLIDER_CATEGORY_OPTION_CREATED_VALUE</option>
+                    <option value="modified">MOD_PRETTYSLIDER_CATEGORY_OPTION_MODIFIED_VALUE</option>
+                    <option value="publish_up">MOD_PRETTYSLIDER_CATEGORY_OPTION_STARTPUBLISHING_VALUE</option>
+                    <option value="a.publish_down">MOD_PRETTYSLIDER_CATEGORY_OPTION_FINISHPUBLISHING_VALUE</option>
+                    <option value="random">MOD_PRETTYSLIDER_CATEGORY_OPTION_RANDOM_VALUE</option>
+                </field>
+                <field
+                        name="article_ordering_direction"
+                        type="list"
+                        label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERINGDIR_LABEL"
+                        default="ASC"
+                        validate="options"
+                        showon="source:articles[AND]article_ordering!:random"
+                >
+                    <option value="ASC">MOD_PRETTYSLIDER_CATEGORY_OPTION_ASCENDING_VALUE</option>
+                    <option value="DESC">MOD_PRETTYSLIDER_CATEGORY_OPTION_DESCENDING_VALUE</option>
                 </field>
                 <field
                         name="imagepriority"
@@ -203,6 +219,31 @@
                     <option value="intro">MOD_PRETTYSLIDER_INTROIMAGE</option>
                     <option value="fulltext">MOD_PRETTYSLIDER_FULLTEXTIMAGE</option>
                 </field>
+                <field
+                        name="descsource"
+                        showon="source:articles"
+                        type="list"
+                        label="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_DESC"
+                        default="articletext"
+                        validate="options"
+                >
+                    <option value="articletext">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_ARTICLE</option>
+                    <option value="imagealt">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGEALT</option>
+                    <option value="imagecaption">MOD_PRETTYSLIDER_FIELD_DESCSOURCE_IMAGECAPTION</option>
+                </field>
+                <field
+                        name="desclength"
+                        showon="source:articles"
+                        type="number"
+                        label="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_DESC"
+                        default="40"
+                        min="1"
+                        max="255"
+                        step="1"
+                        filter="integer"
+                />
                 <field
                         name="articlebutton"
                         showon="source:articles"
@@ -257,6 +298,8 @@
                         hint="btn btn-primary"
                         showon="source:articles[AND]articlebutton:1[AND]articlebuttonclass:custom"
                 />
+            </fieldset>
+            <fieldset name="settings" label="MOD_PRETTYSLIDER_FIELDSET_SETTINGS_LABEL">
                 <field
                         name="titletag"
                         type="list"
@@ -399,47 +442,6 @@
                 >
                     <option value="0">JNO</option>
                     <option value="1">JYES</option>
-                </field>
-                <field
-                        name="catid"
-                        showon="source:articles"
-                        type="category"
-                        label="JCATEGORY"
-                        extension="com_content"
-                        multiple="true"
-                        layout="joomla.form.field.list-fancy-select"
-                        filter="intarray"
-                        class="multipleCategories"
-                />
-                <field
-                        name="article_ordering"
-                        showon="source:articles"
-                        type="list"
-                        label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERING_LABEL"
-                        default="a.title"
-                        validate="options"
-                >
-                    <option value="a.ordering">MOD_PRETTYSLIDER_CATEGORY_OPTION_ORDERING_VALUE</option>
-                    <option value="fp.ordering">MOD_PRETTYSLIDER_CATEGORY_OPTION_ORDERINGFEATURED_VALUE</option>
-                    <option value="a.title">JGLOBAL_TITLE</option>
-                    <option value="a.id">MOD_PRETTYSLIDER_CATEGORY_OPTION_ID_VALUE</option>
-                    <option value="a.alias">JFIELD_ALIAS_LABEL</option>
-                    <option value="a.created">MOD_PRETTYSLIDER_CATEGORY_OPTION_CREATED_VALUE</option>
-                    <option value="modified">MOD_PRETTYSLIDER_CATEGORY_OPTION_MODIFIED_VALUE</option>
-                    <option value="publish_up">MOD_PRETTYSLIDER_CATEGORY_OPTION_STARTPUBLISHING_VALUE</option>
-                    <option value="a.publish_down">MOD_PRETTYSLIDER_CATEGORY_OPTION_FINISHPUBLISHING_VALUE</option>
-                    <option value="random">MOD_PRETTYSLIDER_CATEGORY_OPTION_RANDOM_VALUE</option>
-                </field>
-                <field
-                        name="article_ordering_direction"
-                        type="list"
-                        label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERINGDIR_LABEL"
-                        default="ASC"
-                        validate="options"
-                        showon="source:articles[AND]article_ordering!:random"
-                >
-                    <option value="ASC">MOD_PRETTYSLIDER_CATEGORY_OPTION_ASCENDING_VALUE</option>
-                    <option value="DESC">MOD_PRETTYSLIDER_CATEGORY_OPTION_DESCENDING_VALUE</option>
                 </field>
             </fieldset>
             <fieldset name="advanced">

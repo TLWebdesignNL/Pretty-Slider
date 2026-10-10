@@ -24,10 +24,10 @@ Shows a slider with an image, a title and a short description per slide. The sli
 ## Set-up
 1. Install the ZIP through **System → Install → Extensions**.
 2. Create a **Pretty Slider** site module and assign it to a position and menu items.
-3. On the **Settings** tab, choose **Articles** or **Manual slides**.
+3. On the **Slides** tab, choose **Articles** or **Manual slides**.
    - **Articles**: select the categories and set the number of slides and the ordering. Give the articles an intro image or a full article image, with alt text.
    - **Manual slides**: add a row for each slide.
-4. Set autoplay and the title element.
+4. On the **Settings** tab, set autoplay, the bullets, the title element and the classes.
 
 ## Links
 - [Changelog](changelog.xml)
