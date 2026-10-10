@@ -63,8 +63,11 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         $data['indicators']       = \count($slides) > 1 && (bool) $params->get('indicators', 1);
         $data['moduleclassSfx']   = trim((string) $params->get('moduleclass_sfx', ''));
         $data['mainDivClass']     = PrettysliderHelper::cleanClass((string) $params->get('maindivclass', ''));
-        $data['titleClass']       = PrettysliderHelper::cleanClass($this->getClassParam('titleclass', 'h5'));
-        $data['descriptionClass'] = PrettysliderHelper::cleanClass($this->getClassParam('descriptionclass', 'd-none d-md-block'));
+        $data['titleClass']       = PrettysliderHelper::cleanClass((string) $params->get('titleclass', 'h5'));
+        $data['descriptionClass'] = trim(
+            ((int) $params->get('hidedescmobile', 1) === 1 ? 'd-none d-md-block ' : '')
+            . PrettysliderHelper::cleanClass((string) $params->get('descriptionclass', ''))
+        );
 
         $wa = $data['app']->getDocument()->getWebAssetManager();
         $wa->getRegistry()->addExtensionRegistryFile('mod_prettyslider');
@@ -75,27 +78,5 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         }
 
         return $data;
-    }
-
-    /**
-     * Get a class setting. The default only applies while the setting was never saved, so an emptied
-     * field stays empty. Read from the stored params, because a Registry leaves out empty values.
-     *
-     * @param   string  $name     The name of the setting
-     * @param   string  $default  The default classes
-     *
-     * @return  string
-     *
-     * @since   1.0.0
-     */
-    private function getClassParam(string $name, string $default): string
-    {
-        $stored = json_decode((string) $this->module->params, true);
-
-        if (!\is_array($stored) || !\array_key_exists($name, $stored)) {
-            return $default;
-        }
-
-        return \is_string($stored[$name]) ? $stored[$name] : '';
     }
 }

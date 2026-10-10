@@ -290,8 +290,20 @@
                         type="text"
                         label="MOD_PRETTYSLIDER_FIELD_DESCRIPTIONCLASS_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_DESCRIPTIONCLASS_DESC"
-                        default="d-none d-md-block"
                 />
+                <field
+                        name="hidedescmobile"
+                        type="radio"
+                        default="1"
+                        layout="joomla.form.field.radio.switcher"
+                        label="MOD_PRETTYSLIDER_FIELD_HIDEDESCMOBILE_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_HIDEDESCMOBILE_DESC"
+                        filter="integer"
+                        validate="options"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
                 <field
                         name="autoplay"
                         type="radio"
