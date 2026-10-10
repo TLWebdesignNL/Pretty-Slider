@@ -1,10 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <changelogs>
     <changelog>
         <element>mod_prettyslider</element>
         <type>module</type>
         <version>1.0.0</version>
+        <note>
+            <item>Requires Joomla 5.4 or 6 and PHP 8.1 or later.</item>
+        </note>
         <addition>
-            <item>First release of Pretty Slider.</item>
+            <item>First release of Pretty Slider: a slider with the image, title and a short description of the articles in the selected categories.</item>
+            <item>Settings for the number of slides, article ordering and direction, image priority, description source and length, and the title element.</item>
+            <item>Autoplay with a pause button and a setting for the seconds per slide. Autoplay does not start for visitors who prefer reduced motion.</item>
+            <item>English and Dutch language files.</item>
         </addition>
     </changelog>
 </changelogs>

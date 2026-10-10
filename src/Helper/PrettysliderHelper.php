@@ -5,7 +5,7 @@
  * @subpackage  mod_prettyslider
  *
  * @copyright   Copyright (C) 2024 TLWebdesign. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
 namespace TLWeb\Module\Prettyslider\Site\Helper;
