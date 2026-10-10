@@ -10,10 +10,10 @@
 
 namespace TLWeb\Module\Prettyslider\Site\Helper;
 
-use Joomla\CMS\Access\Access;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\Helpers\StringHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
@@ -21,23 +21,27 @@ use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseAwareInterface;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Registry\Registry;
-use Joomla\CMS\HTML\Helpers\StringHelper;
-use Joomla\CMS\HTML\HTMLHelper;
-
 
 \defined('_JEXEC') or die;
 
 /**
  * Helper for mod_prettyslider
  *
- * @since  V1.0.0
+ * @since  1.0.0
  */
 class PrettysliderHelper implements DatabaseAwareInterface
 {
     use DatabaseAwareTrait;
 
     /**
-     * Retrieve sliders
+     * Maximum number of article batches to load while looking for articles with an image.
+     *
+     * @since  1.0.0
+     */
+    private const MAX_BATCHES = 5;
+
+    /**
+     * Retrieve the slides
      *
      * @param   Registry         $params  The module parameters
      * @param   SiteApplication  $app     The application
@@ -46,36 +50,29 @@ class PrettysliderHelper implements DatabaseAwareInterface
      *
      * @since   1.0.0
      */
-
     public function getSlides(Registry $params, SiteApplication $app): array
     {
-        $slides = array();
-
-        $factory = $app->bootComponent('com_content')->getMVCFactory();
+        $maxSlides = max(1, (int) $params->get('maxslides', 5));
 
         // Get an instance of the generic articles model
-        $articles = $factory->createModel('Articles', 'Site', ['ignore_request' => true]);
+        $articles = $app->bootComponent('com_content')->getMVCFactory()
+            ->createModel('Articles', 'Site', ['ignore_request' => true]);
 
         // Set application parameters in model
-        $appParams = $app->getParams();
-        $articles->setState('params', $appParams);
-
-        $articles->setState('list.start', 0);
+        $articles->setState('params', $app->getParams());
         $articles->setState('filter.published', ContentComponent::CONDITION_PUBLISHED);
-
-        // Set the filters based on the module params
-        $articles->setState('list.limit', (int) $params->get('maxslides', 5));
+        $articles->setState('list.limit', $maxSlides);
 
         // Access filter
         $access     = !ComponentHelper::getParams('com_content')->get('show_noauth');
-        $authorised = Access::getAuthorisedViewLevels($app->getIdentity()->get('id'));
+        $authorised = $app->getIdentity()->getAuthorisedViewLevels();
         $articles->setState('filter.access', $access);
 
-        $catids = $params->get('catid');
-        $articles->setState('filter.category_id', $catids);
+        $articles->setState('filter.category_id', $params->get('catid'));
 
         // Ordering
         $ordering = $params->get('article_ordering', 'a.ordering');
+
         switch ($ordering) {
             case 'random':
                 $articles->setState('list.ordering', $this->getDatabase()->getQuery(true)->rand());
@@ -98,91 +95,134 @@ class PrettysliderHelper implements DatabaseAwareInterface
                 break;
         }
 
-        $items = $articles->getItems();
+        $slides = [];
 
-        foreach ($items as &$item) {
-            $images           = json_decode($item->images);
-            $imagesProperties = get_object_vars($images);
-            $imageUrlExists['intro']   = (!empty($images->image_intro)) ?? null;
-            $imageUrlExists['fulltext']   = (!empty($images->image_fulltext)) ?? null;
+        // Articles without an image are skipped, so keep loading batches until there are enough slides
+        for ($batch = 0; $batch < self::MAX_BATCHES && \count($slides) < $maxSlides; $batch++) {
+            $articles->setState('list.start', $batch * $maxSlides);
+            $items = $articles->getItems() ?: [];
 
-            // check that there is an image
-            $isImage = array_filter($imageUrlExists, function ($value) {
-                return !is_null($value);
-            });
-
-            // check if there is an image url, else we don't add the article to the slides
-            if ($isImage) {
-                $slide = new \stdClass();
-
-                $slide->title = $item->title;
-                // get image priority
-                $imagePriority = $params->get("imagepriority", "intro");
-
-                // check if the image priority has a valid url else set the priority to the other option as fallback
-                if (!$imageUrlExists[$imagePriority]) {
-                    $imagePriority = array_key_first($imageUrlExists);
+            foreach ($items as $item) {
+                // Random ordering can return the same article in more than one batch
+                if (isset($slides[$item->id])) {
+                    continue;
                 }
 
-                //  create image data based on priority
-                $image          = new \stdClass();
-                $imageUrlKey = 'image_' . $imagePriority;
-                $imageCaptionKey = 'image_' . $imagePriority . '_caption';
-                $imageAltKey = 'image_' . $imagePriority  . '_alt';
-                $cleanImageUrl = HTMLHelper::_('cleanImageURL', $images->{$imageUrlKey});
-                $image->url   = $cleanImageUrl->url;
-                $image->height = $cleanImageUrl->attributes['height'];
-                $image->width = $cleanImageUrl->attributes['width'];
-                $image->caption = $images->{$imageCaptionKey};
-                $image->alt     = $images->{$imageAltKey};
+                $image = $this->getImage($item, $params);
 
-                // assign image variable to slide
-                $slide->image = $image;
-
-                switch ($params->get("descsource", "")) {
-                    case "articletext":
-                        $descriptionText = $item->introtext;
-                        break;
-                    case "imagealt":
-                        $descriptionText = $image->alt;
-                        break;
-                    case "imagecaption":
-                        $descriptionText = $image->caption;
-                        break;
-                    default:
-                        $descriptionText = "";
+                if ($image === null) {
+                    continue;
                 }
-                // define description based on settings
-                $slide->description = StringHelper::truncate(
-                    $descriptionText,
-                    $params->get("desclength", 50),
-                    true,
-                    false
-                );
 
-                // check if we have access to the article and then create a link
+                $slide              = new \stdClass();
+                $slide->title       = $item->title;
+                $slide->image       = $image;
+                $slide->description = $this->getDescription($item, $image, $params);
+
                 if ($access || \in_array($item->access, $authorised)) {
                     // We know that user has the privilege to view the article
                     $slide->link = Route::_(RouteHelper::getArticleRoute($item->id . ':' . $item->alias, $item->catid, $item->language));
                 } else {
-                    $input     = $app->getInput();
-                    $menu      = $app->getMenu();
-                    $menuitems = $menu->getItems('link', 'index.php?option=com_users&view=login');
-
-                    if (isset($menuitems[0])) {
-                        $Itemid = $menuitems[0]->id;
-                    } elseif ($input->getInt('Itemid') > 0) {
-                        // Use Itemid from requesting page only if there is no existing menu
-                        $Itemid = $input->getInt('Itemid');
-                    }
-
-                    $slide->link = Route::_('index.php?option=com_users&view=login&Itemid=' . $Itemid);
+                    $slide->link = $this->getLoginLink($app);
                 }
 
-                $slides[] = $slide;
+                $slides[$item->id] = $slide;
+
+                if (\count($slides) >= $maxSlides) {
+                    break;
+                }
+            }
+
+            if (\count($items) < $maxSlides) {
+                break;
             }
         }
 
-        return $slides;
+        return array_values($slides);
+    }
+
+    /**
+     * Get the image of an article, based on the image priority with the other image as fallback
+     *
+     * @param   object    $item    The article
+     * @param   Registry  $params  The module parameters
+     *
+     * @return  \stdClass|null  The image, or null when the article has no image
+     *
+     * @since   1.0.0
+     */
+    private function getImage(object $item, Registry $params): ?\stdClass
+    {
+        // The images column can be empty or invalid for imported articles
+        $data   = json_decode((string) ($item->images ?? ''), true);
+        $images = new Registry(\is_array($data) ? $data : []);
+
+        $available = array_filter([
+            'intro'    => trim((string) $images->get('image_intro', '')),
+            'fulltext' => trim((string) $images->get('image_fulltext', '')),
+        ]);
+
+        if (!$available) {
+            return null;
+        }
+
+        $priority = (string) $params->get('imagepriority', 'intro');
+        $key      = isset($available[$priority]) ? $priority : array_key_first($available);
+        $clean    = HTMLHelper::_('cleanImageURL', $available[$key]);
+
+        $image          = new \stdClass();
+        $image->url     = $clean->url;
+        $image->width   = (int) $clean->attributes['width'];
+        $image->height  = (int) $clean->attributes['height'];
+        $image->caption = trim((string) $images->get('image_' . $key . '_caption', ''));
+        $image->alt     = trim((string) $images->get('image_' . $key . '_alt', ''));
+
+        return $image;
+    }
+
+    /**
+     * Get the slide description from the configured source, truncated to the configured length
+     *
+     * @param   object     $item    The article
+     * @param   \stdClass  $image   The slide image
+     * @param   Registry   $params  The module parameters
+     *
+     * @return  string  The description as plain text
+     *
+     * @since   1.0.0
+     */
+    private function getDescription(object $item, \stdClass $image, Registry $params): string
+    {
+        $text = match ((string) $params->get('descsource', 'articletext')) {
+            'articletext'  => (string) $item->introtext,
+            'imagealt'     => $image->alt,
+            'imagecaption' => $image->caption,
+            default        => '',
+        };
+
+        if (trim($text) === '') {
+            return '';
+        }
+
+        return StringHelper::truncate($text, (int) $params->get('desclength', 40), true, false);
+    }
+
+    /**
+     * Get the link to the login page, for articles the visitor is not allowed to view
+     *
+     * @param   SiteApplication  $app  The application
+     *
+     * @return  string
+     *
+     * @since   1.0.0
+     */
+    private function getLoginLink(SiteApplication $app): string
+    {
+        $link      = 'index.php?option=com_users&view=login';
+        $menuitems = $app->getMenu()->getItems('link', $link);
+        $itemId    = isset($menuitems[0]) ? (int) $menuitems[0]->id : $app->getInput()->getInt('Itemid', 0);
+
+        // Use the Itemid of the requesting page only if there is no login menu item
+        return Route::_($link . ($itemId > 0 ? '&Itemid=' . $itemId : ''));
     }
 }
