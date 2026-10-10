@@ -120,8 +120,14 @@ class PrettysliderHelper implements DatabaseAwareInterface
 
                 $slide              = new \stdClass();
                 $slide->title       = $item->title;
-                $slide->image       = $image;
                 $slide->description = $this->getDescription($item, $image, $params);
+
+                // An image without alt text gets the article title as its text alternative
+                if ($image->alt === '') {
+                    $image->alt = $item->title;
+                }
+
+                $slide->image = $image;
 
                 if ($access || \in_array($item->access, $authorised)) {
                     // We know that user has the privilege to view the article

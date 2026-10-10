@@ -35,13 +35,15 @@ $autoPlay = $params->get("autoplay", null);
                     <div class="w-100 h-100">
                         <img src="<?php
                         echo htmlspecialchars($slide->image->url, ENT_QUOTES, 'UTF-8'); ?>"
+                             alt="<?php
+                                echo htmlspecialchars($slide->image->alt, ENT_QUOTES, 'UTF-8'); ?>"
                              class="w-100 h-auto"
                              width="<?php
                                 echo $slide->image->width; ?>"
                              height="<?php
                                 echo $slide->image->height; ?>"
                         >
-                        <div class="carousel-caption d-none d-md-block">
+                        <div class="carousel-caption">
                             <h5>
                                 <a href="<?php
                                 echo $slide->link; ?>" class="text-white">
@@ -49,7 +51,7 @@ $autoPlay = $params->get("autoplay", null);
                                     echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
                                 </a>
                             </h5>
-                            <p><?php
+                            <p class="d-none d-md-block"><?php
                                 echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
                         </div>
                     </div>
