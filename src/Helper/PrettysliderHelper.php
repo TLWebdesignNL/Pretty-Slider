@@ -14,7 +14,6 @@ use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\HTML\Helpers\StringHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
@@ -40,6 +39,23 @@ class PrettysliderHelper implements DatabaseAwareInterface
      * @since  1.0.0
      */
     private const MAX_BATCHES = 5;
+
+    /**
+     * Article orderings that can be selected in the module settings, besides random.
+     *
+     * @since  1.0.0
+     */
+    private const ORDERINGS = [
+        'a.ordering',
+        'fp.ordering',
+        'a.title',
+        'a.id',
+        'a.alias',
+        'a.created',
+        'modified',
+        'publish_up',
+        'a.publish_down',
+    ];
 
     /**
      * Retrieve the slides
@@ -72,28 +88,15 @@ class PrettysliderHelper implements DatabaseAwareInterface
         $articles->setState('filter.category_id', $params->get('catid'));
 
         // Ordering
-        $ordering = $params->get('article_ordering', 'a.ordering');
+        $ordering = (string) $params->get('article_ordering', 'a.title');
 
-        switch ($ordering) {
-            case 'random':
-                $articles->setState('list.ordering', $this->getDatabase()->getQuery(true)->rand());
-                break;
+        if ($ordering === 'random') {
+            $articles->setState('list.ordering', $this->getDatabase()->getQuery(true)->rand());
+        } else {
+            $direction = strtoupper((string) $params->get('article_ordering_direction', 'ASC'));
 
-            case 'rating_count':
-            case 'rating':
-                $articles->setState('list.ordering', $ordering);
-                $articles->setState('list.direction', $params->get('article_ordering_direction', 'ASC'));
-
-                if (!PluginHelper::isEnabled('content', 'vote')) {
-                    $articles->setState('list.ordering', 'a.ordering');
-                }
-
-                break;
-
-            default:
-                $articles->setState('list.ordering', $ordering);
-                $articles->setState('list.direction', $params->get('article_ordering_direction', 'ASC'));
-                break;
+            $articles->setState('list.ordering', \in_array($ordering, self::ORDERINGS, true) ? $ordering : 'a.title');
+            $articles->setState('list.direction', $direction === 'DESC' ? 'DESC' : 'ASC');
         }
 
         $slides = [];

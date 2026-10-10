@@ -122,6 +122,17 @@
                     <option value="a.publish_down">MOD_PRETTYSLIDER_CATEGORY_OPTION_FINISHPUBLISHING_VALUE</option>
                     <option value="random">MOD_PRETTYSLIDER_CATEGORY_OPTION_RANDOM_VALUE</option>
                 </field>
+                <field
+                        name="article_ordering_direction"
+                        type="list"
+                        label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERINGDIR_LABEL"
+                        default="ASC"
+                        validate="options"
+                        showon="article_ordering!:random"
+                >
+                    <option value="ASC">MOD_PRETTYSLIDER_CATEGORY_OPTION_ASCENDING_VALUE</option>
+                    <option value="DESC">MOD_PRETTYSLIDER_CATEGORY_OPTION_DESCENDING_VALUE</option>
+                </field>
             </fieldset>
             <fieldset name="advanced">
                 <field
