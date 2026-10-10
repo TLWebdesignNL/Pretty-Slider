@@ -16,6 +16,7 @@ use Joomla\CMS\HTML\Helpers\StringHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
 use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseAwareInterface;
@@ -147,7 +148,7 @@ class PrettysliderHelper implements DatabaseAwareInterface
      * @param   object    $item    The article
      * @param   Registry  $params  The module parameters
      *
-     * @return  \stdClass|null  The image, or null when the article has no image
+     * @return  \stdClass|null  The image, or null when the article has no usable image
      *
      * @since   1.0.0
      */
@@ -166,18 +167,61 @@ class PrettysliderHelper implements DatabaseAwareInterface
             return null;
         }
 
+        // Try the preferred image first, then the other one
         $priority = (string) $params->get('imagepriority', 'intro');
-        $key      = isset($available[$priority]) ? $priority : array_key_first($available);
-        $clean    = HTMLHelper::_('cleanImageURL', $available[$key]);
 
-        $image          = new \stdClass();
-        $image->url     = $clean->url;
-        $image->width   = (int) $clean->attributes['width'];
-        $image->height  = (int) $clean->attributes['height'];
-        $image->caption = trim((string) $images->get('image_' . $key . '_caption', ''));
-        $image->alt     = trim((string) $images->get('image_' . $key . '_alt', ''));
+        if (isset($available[$priority])) {
+            $available = [$priority => $available[$priority]] + $available;
+        }
 
-        return $image;
+        foreach ($available as $key => $value) {
+            $clean = HTMLHelper::_('cleanImageURL', $value);
+            $url   = $this->resolveImageUrl($clean->url);
+
+            if ($url === null) {
+                continue;
+            }
+
+            $image          = new \stdClass();
+            $image->url     = $url;
+            $image->width   = (int) $clean->attributes['width'];
+            $image->height  = (int) $clean->attributes['height'];
+            $image->caption = trim((string) $images->get('image_' . $key . '_caption', ''));
+            $image->alt     = trim((string) $images->get('image_' . $key . '_alt', ''));
+
+            return $image;
+        }
+
+        return null;
+    }
+
+    /**
+     * Turn a stored image value into a URL that can be used in the page
+     *
+     * @param   string  $url  The image path or URL, without the Joomla image fragment
+     *
+     * @return  string|null  The URL, or null when it is not a local path or an http(s) URL
+     *
+     * @since   1.0.0
+     */
+    private function resolveImageUrl(string $url): ?string
+    {
+        $parts = parse_url($url);
+
+        if ($url === '' || $parts === false) {
+            return null;
+        }
+
+        if (isset($parts['scheme'])) {
+            return \in_array(strtolower($parts['scheme']), ['http', 'https'], true) ? $url : null;
+        }
+
+        // Protocol-relative URLs are not local files
+        if (isset($parts['host'])) {
+            return null;
+        }
+
+        return Uri::root(true) . '/' . ltrim($url, '/');
     }
 
     /**

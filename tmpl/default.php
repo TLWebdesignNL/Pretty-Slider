@@ -12,7 +12,6 @@
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::_('bootstrap.carousel', 'prettySliderCarousel' . $module->id);
 
@@ -35,7 +34,7 @@ $autoPlay = $params->get("autoplay", null);
                      style="flex: 0 0 100%;">
                     <div class="w-100 h-100">
                         <img src="<?php
-                        echo Uri::root() . $slide->image->url; ?>"
+                        echo htmlspecialchars($slide->image->url, ENT_QUOTES, 'UTF-8'); ?>"
                              class="w-100 h-auto"
                              width="<?php
                                 echo $slide->image->width; ?>"
@@ -47,11 +46,11 @@ $autoPlay = $params->get("autoplay", null);
                                 <a href="<?php
                                 echo $slide->link; ?>" class="text-white">
                                     <?php
-                                    echo $slide->title; ?>
+                                    echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
                                 </a>
                             </h5>
                             <p><?php
-                                echo $slide->description; ?></p>
+                                echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
                         </div>
                     </div>
                 </div>
