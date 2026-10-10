@@ -1,2 +1,11 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Not part of the install package
+updates.xml export-ignore
+changelog.xml export-ignore
+.gitignore export-ignore
+.gitattributes export-ignore
+README.md export-ignore
+.github export-ignore
+.claude export-ignore

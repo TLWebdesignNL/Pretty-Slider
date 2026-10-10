@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'V*'
+
+env:
+  # Joomla versions offered this release, as a regex matched against JVERSION.
+  # Must match the minimum in script.php (MINIMUM_JOOMLA): 5.4.x and 6.x.
+  TARGETPLATFORM: '(5\.4|6\.[0-9]+)\..*'
+
+jobs:
+  update-xml:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract version and build download URL
+        id: vars
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#V}"
+          ZIP_URL="https://github.com/${{ github.repository }}/archive/refs/tags/${TAG}.zip"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "zip_url=${ZIP_URL}" >> $GITHUB_OUTPUT
+
+      - name: Download release zip and compute SHA256
+        id: sha256
+        run: |
+          curl -fL -o release.zip "${{ steps.vars.outputs.zip_url }}"
+          SHA=$(sha256sum release.zip | awk '{print $1}')
+          echo "value=${SHA}" >> $GITHUB_OUTPUT
+
+      - name: Append entry to updates.xml
+        env:
+          VERSION: ${{ steps.vars.outputs.version }}
+          TAG: ${{ steps.vars.outputs.tag }}
+          SHA256: ${{ steps.sha256.outputs.value }}
+          TARGETPLATFORM: ${{ env.TARGETPLATFORM }}
+        run: |
+          python3 - <<'EOF'
+          import re, os
+
+          version = os.environ["VERSION"]
+          tag     = os.environ["TAG"]
+          sha256  = os.environ["SHA256"]
+          repo    = os.environ["GITHUB_REPOSITORY"]
+          platform = os.environ["TARGETPLATFORM"]
+
+          if not re.fullmatch(r'[a-f0-9]{64}', sha256):
+              raise SystemExit(f"Invalid SHA256 for release zip: {sha256!r}")
+
+          with open("updates.xml", "r") as f:
+              content = f.read()
+
+          # Extract the last <update> block as a template
+          blocks = re.findall(r'<update>.*?</update>', content, re.DOTALL)
+          if not blocks:
+              raise SystemExit("No existing <update> block found to use as template.")
+          last = blocks[-1]
+
+          # An entry without a hash is a placeholder for a release that was never built: drop it
+          for block in blocks:
+              if re.search(r'<sha256>\s*</sha256>', block):
+                  content = re.sub(r'[ \t]*' + re.escape(block) + r'\n?', '', content, count=1)
+
+          if f"<version>{version}</version>" in content:
+              print(f"Version {version} already exists, skipping.")
+              raise SystemExit(0)
+
+          # Set name, version, download URL and changelog URL explicitly, from this repository and tag
+          zip_url       = f"https://github.com/{repo}/archive/refs/tags/{tag}.zip"
+          changelog_url = f"https://raw.githubusercontent.com/{repo}/main/changelog.xml"
+
+          new_block = re.sub(r'<name>[^<]*</name>', lambda m: f'<name>Pretty Slider {version}</name>', last, count=1)
+          new_block = re.sub(r'<version>[^<]*</version>', lambda m: f'<version>{version}</version>', new_block, count=1)
+          new_block = re.sub(r'(<downloadurl\b[^>]*>)\s*[^<]*?\s*(</downloadurl>)',
+                             lambda m: f'{m.group(1)}\n                {zip_url}\n            {m.group(2)}', new_block, count=1)
+          new_block = re.sub(r'<changelogurl>[^<]*</changelogurl>', lambda m: f'<changelogurl>{changelog_url}</changelogurl>', new_block, count=1)
+
+          if zip_url not in new_block or f'<version>{version}</version>' not in new_block:
+              raise SystemExit("Could not set the download URL or version in the new update block.")
+
+          # Update sha256 (also when the template's value is empty), or insert it
+          sha_element = f'<sha256>{sha256}</sha256>'
+          if re.search(r'<sha256>[a-f0-9]*</sha256>', new_block):
+              new_block = re.sub(r'<sha256>[a-f0-9]*</sha256>', lambda m: sha_element, new_block)
+          else:
+              new_block = re.sub(r'(\s*)(</tags>)', lambda m: m.group(0) + m.group(1) + sha_element, new_block, count=1)
+
+          # Set targetplatform explicitly instead of copying it from the template
+          platform_element = f'<targetplatform name="joomla" version="{platform}"/>'
+          if re.search(r'<targetplatform\b[^>]*/>', new_block):
+              new_block = re.sub(r'<targetplatform\b[^>]*/>', lambda m: platform_element, new_block)
+          else:
+              new_block = re.sub(r'(\s*)(<client>)', lambda m: m.group(1) + platform_element + m.group(0), new_block, count=1)
+
+          # Guard: the new entry must carry exactly one valid hash and the configured platform
+          hashes = re.findall(r'<sha256>([^<]*)</sha256>', new_block)
+          if hashes != [sha256]:
+              raise SystemExit(f"New update block has invalid <sha256> element(s): {hashes!r}")
+          if platform_element not in new_block:
+              raise SystemExit("New update block has no <targetplatform> element.")
+
+          # Indent the new block like the other entries
+          new_block = '    ' + new_block.lstrip()
+
+          content = content.replace('</updates>', new_block + '\n</updates>')
+          with open("updates.xml", "w") as f:
+              f.write(content)
+          print(f"Added version {version} (sha256: {sha256})")
+          EOF
+
+      - name: Commit and push updated updates.xml
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add updates.xml
+          git diff --cached --quiet && echo "No changes to commit" && exit 0
+          git commit -m "chore: add updates.xml entry for ${{ steps.vars.outputs.tag }}"
+          git push origin main

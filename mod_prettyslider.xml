@@ -219,8 +219,8 @@
     </config>
     <updateservers>
         <server type="extension" priority="2" name="Pretty Slider Updates">
-            https://raw.githubusercontent.com/TLWebdesign/Pretty-Slider/main/updates.xml
+            https://raw.githubusercontent.com/TLWebdesignNL/Pretty-Slider/main/updates.xml
         </server>
     </updateservers>
-    <changelogurl>https://raw.githubusercontent.com/TLWebdesign/Pretty-Slider/main/changelog.xml</changelogurl>
+    <changelogurl>https://raw.githubusercontent.com/TLWebdesignNL/Pretty-Slider/main/changelog.xml</changelogurl>
 </extension>
