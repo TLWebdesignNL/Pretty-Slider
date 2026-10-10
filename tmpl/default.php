@@ -21,6 +21,9 @@ use Joomla\CMS\Language\Text;
  * @var  boolean    $autoplay
  * @var  integer    $interval
  * @var  string     $moduleclassSfx
+ * @var  string     $mainDivClass
+ * @var  string     $titleClass
+ * @var  string     $descriptionClass
  */
 
 // The rotation is started and stopped by the module script, so the visitor can pause it
@@ -28,7 +31,7 @@ HTMLHelper::_('bootstrap.carousel', '#' . $sliderId, ['interval' => $interval, '
 
 $slideCount = count($slides);
 ?>
-<div class="mod-prettyslider prettySliderWrapper<?php echo $moduleclassSfx !== '' ? ' ' . htmlspecialchars($moduleclassSfx, ENT_QUOTES, 'UTF-8') : ''; ?>">
+<div class="<?php echo htmlspecialchars(trim('mod-prettyslider prettySliderWrapper ' . $moduleclassSfx . ' ' . $mainDivClass), ENT_QUOTES, 'UTF-8'); ?>">
     <div id="<?php echo $sliderId; ?>"
          class="carousel slide"
          role="region"
@@ -87,7 +90,7 @@ $slideCount = count($slides);
                         <?php if ($slide->title !== '' || $slide->description !== '' || $slide->button) : ?>
                             <div class="carousel-caption">
                                 <?php if ($slide->title !== '') : ?>
-                                    <<?php echo $titleTag; ?> class="h5 prettyslider-title">
+                                    <<?php echo $titleTag; ?> class="<?php echo htmlspecialchars(trim($titleClass . ' prettyslider-title'), ENT_QUOTES, 'UTF-8'); ?>">
                                         <?php if ($link !== '') : ?>
                                             <a href="<?php echo $link; ?>"<?php echo $target; ?>>
                                                 <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
@@ -101,11 +104,11 @@ $slideCount = count($slides);
                                     </<?php echo $titleTag; ?>>
                                 <?php endif; ?>
                                 <?php if ($slide->description !== '') : ?>
-                                    <p class="d-none d-md-block"><?php echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
+                                    <p class="<?php echo htmlspecialchars(trim($descriptionClass . ' prettyslider-description'), ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
                                 <?php endif; ?>
                                 <?php if ($slide->button && $link !== '') : ?>
                                     <a href="<?php echo $link; ?>"<?php echo $target; ?>
-                                       class="btn <?php echo htmlspecialchars($slide->button->class, ENT_QUOTES, 'UTF-8'); ?> prettyslider-button">
+                                       class="<?php echo htmlspecialchars($slide->button->class . ' prettyslider-button', ENT_QUOTES, 'UTF-8'); ?>">
                                         <?php echo htmlspecialchars($slide->button->text, ENT_QUOTES, 'UTF-8'); ?>
                                         <?php if ($slide->title !== '') : ?>
                                             <span class="visually-hidden">: <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?></span>

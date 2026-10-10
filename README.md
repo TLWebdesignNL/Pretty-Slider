@@ -11,7 +11,8 @@ Shows a slider with an image, a title and a short description per slide. The sli
 ## Features
 - Slides from the published articles in the selected categories, or from all categories
 - Or manual slides: add your own slides with an image, alt text, title, description, link and button
-- Optional button on article slides, with your own text and Bootstrap button class
+- Optional button on article slides, with your own text
+- Bootstrap button classes to pick per button, plus your own class; class settings for the main div, title and description
 - Uses the intro image or the full article image, with the other one as fallback; articles without an image are skipped
 - Description from the article text, the image alt text or the image caption, cut off at a length you choose
 - Article ordering and direction, including random

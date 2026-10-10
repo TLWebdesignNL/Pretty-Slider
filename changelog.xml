@@ -10,7 +10,8 @@
         <addition>
             <item>First release of Pretty Slider: a slider with an image, title and short description per slide.</item>
             <item>Slides from the articles in the selected categories, or manual slides that you create in the module with an image, title, description and link.</item>
-            <item>Optional button on each slide, with your own text and Bootstrap button class.</item>
+            <item>Optional button on each slide, with your own text, a choice of Bootstrap button classes and a custom class.</item>
+            <item>Class settings for the main div, the slide title and the slide description.</item>
             <item>Settings for the number of slides, article ordering and direction, image priority, description source and length, and the title element.</item>
             <item>Autoplay with a pause button and a setting for the seconds per slide. Autoplay does not start for visitors who prefer reduced motion.</item>
             <item>English and Dutch language files.</item>

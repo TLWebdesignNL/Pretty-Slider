@@ -109,10 +109,34 @@
                         />
                         <field
                                 name="buttonclass"
-                                type="text"
+                                type="checkboxes"
+                                default="btn,btn-primary"
                                 label="MOD_PRETTYSLIDER_FIELD_BUTTONCLASS_LABEL"
                                 description="MOD_PRETTYSLIDER_FIELD_BUTTONCLASS_DESC"
-                                default="btn-primary"
+                                multiple="true"
+                        >
+                            <option value="btn">MOD_PRETTYSLIDER_BUTTONCLASS_BTN</option>
+                            <option value="btn-primary">MOD_PRETTYSLIDER_BUTTONCLASS_BTNPRIMARY</option>
+                            <option value="btn-secondary">MOD_PRETTYSLIDER_BUTTONCLASS_BTNSECONDARY</option>
+                            <option value="btn-success">MOD_PRETTYSLIDER_BUTTONCLASS_BTNSUCCESS</option>
+                            <option value="btn-danger">MOD_PRETTYSLIDER_BUTTONCLASS_BTNDANGER</option>
+                            <option value="btn-warning">MOD_PRETTYSLIDER_BUTTONCLASS_BTNWARNING</option>
+                            <option value="btn-info">MOD_PRETTYSLIDER_BUTTONCLASS_BTNINFO</option>
+                            <option value="btn-light">MOD_PRETTYSLIDER_BUTTONCLASS_BTNLIGHT</option>
+                            <option value="btn-dark">MOD_PRETTYSLIDER_BUTTONCLASS_BTNDARK</option>
+                            <option value="btn-link">MOD_PRETTYSLIDER_BUTTONCLASS_BTNLINK</option>
+                            <option value="btn-lg">MOD_PRETTYSLIDER_BUTTONCLASS_BTNLG</option>
+                            <option value="btn-sm">MOD_PRETTYSLIDER_BUTTONCLASS_BTNSM</option>
+                            <option value="w-100">MOD_PRETTYSLIDER_BUTTONCLASS_W100</option>
+                            <option value="custom">MOD_PRETTYSLIDER_BUTTONCLASS_CUSTOMCLASS</option>
+                        </field>
+                        <field
+                                name="custombuttonclass"
+                                type="text"
+                                label="MOD_PRETTYSLIDER_FIELD_CUSTOMBUTTONCLASS_LABEL"
+                                description="MOD_PRETTYSLIDER_FIELD_CUSTOMBUTTONCLASS_DESC"
+                                hint="btn btn-primary"
+                                showon="buttonclass:custom"
                         />
                         <field
                                 name="newwindow"
@@ -204,10 +228,34 @@
                 <field
                         name="articlebuttonclass"
                         showon="source:articles[AND]articlebutton:1"
-                        type="text"
+                        type="checkboxes"
+                        default="btn,btn-primary"
                         label="MOD_PRETTYSLIDER_FIELD_BUTTONCLASS_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_BUTTONCLASS_DESC"
-                        default="btn-primary"
+                        multiple="true"
+                >
+                    <option value="btn">MOD_PRETTYSLIDER_BUTTONCLASS_BTN</option>
+                    <option value="btn-primary">MOD_PRETTYSLIDER_BUTTONCLASS_BTNPRIMARY</option>
+                    <option value="btn-secondary">MOD_PRETTYSLIDER_BUTTONCLASS_BTNSECONDARY</option>
+                    <option value="btn-success">MOD_PRETTYSLIDER_BUTTONCLASS_BTNSUCCESS</option>
+                    <option value="btn-danger">MOD_PRETTYSLIDER_BUTTONCLASS_BTNDANGER</option>
+                    <option value="btn-warning">MOD_PRETTYSLIDER_BUTTONCLASS_BTNWARNING</option>
+                    <option value="btn-info">MOD_PRETTYSLIDER_BUTTONCLASS_BTNINFO</option>
+                    <option value="btn-light">MOD_PRETTYSLIDER_BUTTONCLASS_BTNLIGHT</option>
+                    <option value="btn-dark">MOD_PRETTYSLIDER_BUTTONCLASS_BTNDARK</option>
+                    <option value="btn-link">MOD_PRETTYSLIDER_BUTTONCLASS_BTNLINK</option>
+                    <option value="btn-lg">MOD_PRETTYSLIDER_BUTTONCLASS_BTNLG</option>
+                    <option value="btn-sm">MOD_PRETTYSLIDER_BUTTONCLASS_BTNSM</option>
+                    <option value="w-100">MOD_PRETTYSLIDER_BUTTONCLASS_W100</option>
+                    <option value="custom">MOD_PRETTYSLIDER_BUTTONCLASS_CUSTOMCLASS</option>
+                </field>
+                <field
+                        name="articlecustombuttonclass"
+                        type="text"
+                        label="MOD_PRETTYSLIDER_FIELD_CUSTOMBUTTONCLASS_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_CUSTOMBUTTONCLASS_DESC"
+                        hint="btn btn-primary"
+                        showon="source:articles[AND]articlebutton:1[AND]articlebuttonclass:custom"
                 />
                 <field
                         name="titletag"
@@ -224,6 +272,26 @@
                     <option value="h5">h5</option>
                     <option value="h6">h6</option>
                 </field>
+                <field
+                        name="maindivclass"
+                        type="text"
+                        label="MOD_PRETTYSLIDER_FIELD_MAINDIVCLASS_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_MAINDIVCLASS_DESC"
+                />
+                <field
+                        name="titleclass"
+                        type="text"
+                        label="MOD_PRETTYSLIDER_FIELD_TITLECLASS_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_TITLECLASS_DESC"
+                        default="h5"
+                />
+                <field
+                        name="descriptionclass"
+                        type="text"
+                        label="MOD_PRETTYSLIDER_FIELD_DESCRIPTIONCLASS_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_DESCRIPTIONCLASS_DESC"
+                        default="d-none d-md-block"
+                />
                 <field
                         name="autoplay"
                         type="radio"

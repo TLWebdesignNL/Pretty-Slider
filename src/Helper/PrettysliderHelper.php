@@ -43,6 +43,27 @@ class PrettysliderHelper implements DatabaseAwareInterface
     private const MAX_BATCHES = 5;
 
     /**
+     * Bootstrap button classes that can be selected for a slide button.
+     *
+     * @since  1.0.0
+     */
+    private const BUTTON_CLASSES = [
+        'btn',
+        'btn-primary',
+        'btn-secondary',
+        'btn-success',
+        'btn-danger',
+        'btn-warning',
+        'btn-info',
+        'btn-light',
+        'btn-dark',
+        'btn-link',
+        'btn-lg',
+        'btn-sm',
+        'w-100',
+    ];
+
+    /**
      * Article orderings that can be selected in the module settings, besides random.
      *
      * @since  1.0.0
@@ -120,7 +141,7 @@ class PrettysliderHelper implements DatabaseAwareInterface
             $slide->link        = $this->getManualLink((string) ($row['link'] ?? ''));
             $slide->newWindow   = $slide->link !== '' && (int) ($row['newwindow'] ?? 0) === 1;
             $slide->button      = $slide->link !== ''
-                ? $this->getButton((string) ($row['buttontext'] ?? ''), (string) ($row['buttonclass'] ?? ''))
+                ? $this->getButton((string) ($row['buttontext'] ?? ''), $row['buttonclass'] ?? null, (string) ($row['custombuttonclass'] ?? ''))
                 : null;
 
             $slides[] = $slide;
@@ -132,14 +153,15 @@ class PrettysliderHelper implements DatabaseAwareInterface
     /**
      * Build the button of a slide
      *
-     * @param   string  $text   The button text
-     * @param   string  $class  The Bootstrap button classes, such as "btn-primary"
+     * @param   string  $text     The button text
+     * @param   mixed   $classes  The selected Bootstrap button classes, with "custom" for the custom class
+     * @param   string  $custom   The custom class, used when "custom" is selected
      *
      * @return  \stdClass|null  The button, or null without a text
      *
      * @since   1.0.0
      */
-    private function getButton(string $text, string $class): ?\stdClass
+    private function getButton(string $text, $classes, string $custom): ?\stdClass
     {
         $text = trim($text);
 
@@ -147,11 +169,39 @@ class PrettysliderHelper implements DatabaseAwareInterface
             return null;
         }
 
+        if (\is_string($classes)) {
+            $classes = explode(',', $classes);
+        }
+
+        $classes   = (\is_object($classes) || \is_array($classes)) ? array_map('strval', array_values((array) $classes)) : [];
+        $useCustom = \in_array('custom', $classes, true);
+        $classes   = array_values(array_intersect(self::BUTTON_CLASSES, $classes));
+
+        if ($useCustom) {
+            $classes[] = self::cleanClass($custom);
+        }
+
+        $class = trim(implode(' ', $classes));
+
         $button        = new \stdClass();
         $button->text  = $text;
-        $button->class = trim(preg_replace('/[^A-Za-z0-9 _-]/', '', $class) ?? '') ?: 'btn-primary';
+        $button->class = $class !== '' ? $class : 'btn btn-primary';
 
         return $button;
+    }
+
+    /**
+     * Reduce a class setting to characters that are valid in a list of CSS classes
+     *
+     * @param   string  $class  One or more CSS classes, separated by spaces
+     *
+     * @return  string
+     *
+     * @since   1.0.0
+     */
+    public static function cleanClass(string $class): string
+    {
+        return trim(preg_replace('/\s+/', ' ', preg_replace('/[^A-Za-z0-9 _:\/.-]/', '', $class) ?? '') ?? '');
     }
 
     /**
@@ -237,7 +287,8 @@ class PrettysliderHelper implements DatabaseAwareInterface
             $buttonText = trim((string) $params->get('articlebuttontext', ''));
             $button     = $this->getButton(
                 $buttonText !== '' ? $buttonText : Text::_('MOD_PRETTYSLIDER_READ_MORE'),
-                (string) $params->get('articlebuttonclass', 'btn-primary')
+                $params->get('articlebuttonclass'),
+                (string) $params->get('articlecustombuttonclass', '')
             );
         }
 
