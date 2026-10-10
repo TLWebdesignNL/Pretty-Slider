@@ -115,6 +115,36 @@
   padding-bottom: 2.75rem;
 }
 
+/* Caption at the top: the gradient runs down, and the text stays clear of the pause button */
+.mod-prettyslider.prettyslider-caption-top .carousel-caption {
+  top: 0;
+  bottom: auto;
+  padding: 1.25rem max(15%, 4rem) 3rem;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+}
+
+/* Caption in the middle: a dark band behind the text that fades out above and below it */
+.mod-prettyslider.prettyslider-caption-middle .carousel-caption {
+  top: 0;
+  bottom: 0;
+  height: fit-content;
+  padding: 3rem 15%;
+  margin-block: auto;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.65) 2.5rem, rgba(0, 0, 0, 0.65) calc(100% - 2.5rem), rgba(0, 0, 0, 0));
+}
+
+.mod-prettyslider.prettyslider-align-start .carousel-caption {
+  text-align: start;
+}
+
+.mod-prettyslider.prettyslider-align-end .carousel-caption {
+  text-align: end;
+}
+
+.mod-prettyslider.prettyslider-no-gradient .carousel-caption {
+  background: none;
+}
+
 /* A line at the top that fills up until the next slide */
 .mod-prettyslider .prettyslider-progress {
   position: absolute;

@@ -24,6 +24,9 @@ use Joomla\CMS\Language\Text;
  * @var  boolean    $pauseButton
  * @var  boolean    $progress
  * @var  boolean    $indicators
+ * @var  string     $captionPosition
+ * @var  string     $captionAlign
+ * @var  boolean    $captionGradient
  * @var  string     $moduleclassSfx
  * @var  string     $mainDivClass
  * @var  string     $titleClass
@@ -34,8 +37,15 @@ use Joomla\CMS\Language\Text;
 HTMLHelper::_('bootstrap.carousel', '#' . $sliderId, ['interval' => $interval, 'ride' => false, 'pause' => false]);
 
 $slideCount = count($slides);
+
+$wrapperClass = 'mod-prettyslider prettySliderWrapper'
+    . ' prettyslider-caption-' . $captionPosition
+    . ' prettyslider-align-' . $captionAlign
+    . ($captionGradient ? '' : ' prettyslider-no-gradient')
+    . ($indicators ? ' has-indicators' : '')
+    . ' ' . $moduleclassSfx . ' ' . $mainDivClass;
 ?>
-<div class="<?php echo htmlspecialchars(trim('mod-prettyslider prettySliderWrapper ' . ($indicators ? 'has-indicators ' : '') . $moduleclassSfx . ' ' . $mainDivClass), ENT_QUOTES, 'UTF-8'); ?>">
+<div class="<?php echo htmlspecialchars(trim($wrapperClass), ENT_QUOTES, 'UTF-8'); ?>">
     <div id="<?php echo $sliderId; ?>"
          class="carousel slide"
          role="region"

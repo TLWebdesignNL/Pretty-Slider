@@ -347,6 +347,43 @@
                     <option value="1">JYES</option>
                 </field>
                 <field
+                        name="captionposition"
+                        type="list"
+                        label="MOD_PRETTYSLIDER_FIELD_CAPTIONPOSITION_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_CAPTIONPOSITION_DESC"
+                        default="bottom"
+                        validate="options"
+                >
+                    <option value="top">MOD_PRETTYSLIDER_CAPTIONPOSITION_TOP</option>
+                    <option value="middle">MOD_PRETTYSLIDER_CAPTIONPOSITION_MIDDLE</option>
+                    <option value="bottom">MOD_PRETTYSLIDER_CAPTIONPOSITION_BOTTOM</option>
+                </field>
+                <field
+                        name="captionalign"
+                        type="list"
+                        label="MOD_PRETTYSLIDER_FIELD_CAPTIONALIGN_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_CAPTIONALIGN_DESC"
+                        default="center"
+                        validate="options"
+                >
+                    <option value="start">MOD_PRETTYSLIDER_CAPTIONALIGN_START</option>
+                    <option value="center">MOD_PRETTYSLIDER_CAPTIONALIGN_CENTER</option>
+                    <option value="end">MOD_PRETTYSLIDER_CAPTIONALIGN_END</option>
+                </field>
+                <field
+                        name="captiongradient"
+                        type="radio"
+                        default="1"
+                        layout="joomla.form.field.radio.switcher"
+                        label="MOD_PRETTYSLIDER_FIELD_CAPTIONGRADIENT_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_CAPTIONGRADIENT_DESC"
+                        filter="integer"
+                        validate="options"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field
                         name="autoplay"
                         type="radio"
                         default="1"

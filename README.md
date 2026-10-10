@@ -13,6 +13,7 @@ Shows a slider with an image, a title and a short description per slide. The sli
 - Or manual slides: add your own slides with an image, alt text, title, description, link and button
 - Optional button on article slides, with your own text
 - Bootstrap button classes to pick per button, plus your own class; class settings for the main div, title and description
+- Text on the slide at the top, in the middle or at the bottom, aligned left, centre or right, with a dark gradient behind it that you can switch off
 - Uses the intro image or the full article image, with the other one as fallback; articles without an image are skipped
 - Description from the article text, the image alt text or the image caption, cut off at a length you choose
 - Article ordering and direction, including random
@@ -27,7 +28,7 @@ Shows a slider with an image, a title and a short description per slide. The sli
 3. On the **Slides** tab, choose **Articles** or **Manual slides**.
    - **Articles**: select the categories and set the number of slides and the ordering. Give the articles an intro image or a full article image, with alt text.
    - **Manual slides**: add a row for each slide.
-4. On the **Settings** tab, set autoplay, the bullets, the title element and the classes.
+4. On the **Settings** tab, set autoplay, the bullets, the title element, the classes and the position of the text.
 
 ## Links
 - [Changelog](changelog.xml)

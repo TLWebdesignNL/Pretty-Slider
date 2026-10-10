@@ -34,6 +34,20 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
     private const TITLE_TAGS = ['p', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
     /**
+     * Vertical positions of the caption on the slide.
+     *
+     * @since  1.1.0
+     */
+    private const CAPTION_POSITIONS = ['top', 'middle', 'bottom'];
+
+    /**
+     * Horizontal alignments of the caption text.
+     *
+     * @since  1.1.0
+     */
+    private const CAPTION_ALIGNMENTS = ['start', 'center', 'end'];
+
+    /**
      * Returns the layout data.
      *
      * @return  array|false  The layout data, or false when there is nothing to show
@@ -52,6 +66,8 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         }
 
         $titleTag = (string) $params->get('titletag', 'p');
+        $captionPosition = (string) $params->get('captionposition', 'bottom');
+        $captionAlign    = (string) $params->get('captionalign', 'center');
 
         $data['slides']           = $slides;
         $data['sliderId']         = 'prettySliderCarousel' . (int) $this->module->id;
@@ -62,6 +78,9 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         $data['pauseButton']      = $data['autoplay'] && (bool) $params->get('pausebutton', 1);
         $data['progress']         = $data['autoplay'] && (bool) $params->get('progress', 1);
         $data['indicators']       = \count($slides) > 1 && (bool) $params->get('indicators', 1);
+        $data['captionPosition']  = \in_array($captionPosition, self::CAPTION_POSITIONS, true) ? $captionPosition : 'bottom';
+        $data['captionAlign']     = \in_array($captionAlign, self::CAPTION_ALIGNMENTS, true) ? $captionAlign : 'center';
+        $data['captionGradient']  = (bool) $params->get('captiongradient', 1);
         $data['moduleclassSfx']   = trim((string) $params->get('moduleclass_sfx', ''));
         $data['mainDivClass']     = PrettysliderHelper::cleanClass((string) $params->get('maindivclass', ''));
         // Without classes of its own the title gets the module's default look
