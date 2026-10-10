@@ -8,7 +8,8 @@
             <item>Requires Joomla 5.4 or 6 and PHP 8.1 or later.</item>
         </note>
         <addition>
-            <item>First release of Pretty Slider: a slider with the image, title and a short description of the articles in the selected categories.</item>
+            <item>First release of Pretty Slider: a slider with an image, title and short description per slide.</item>
+            <item>Slides from the articles in the selected categories, or manual slides that you create in the module with an image, title, description and link.</item>
             <item>Settings for the number of slides, article ordering and direction, image priority, description source and length, and the title element.</item>
             <item>Autoplay with a pause button and a setting for the seconds per slide. Autoplay does not start for visitors who prefer reduced motion.</item>
             <item>English and Dutch language files.</item>

@@ -24,7 +24,7 @@
         <filename>logo.svg</filename>
     </media>
     <config>
-        <fields name="params">
+        <fields name="params" addruleprefix="TLWeb\Module\Prettyslider\Site\Rule">
             <fieldset name="basic">
                 <field
                         name="logo"
@@ -44,7 +44,80 @@
             </fieldset>
             <fieldset name="settings" label="MOD_PRETTYSLIDER_FIELDSET_SETTINGS_LABEL">
                 <field
+                        name="source"
+                        type="radio"
+                        default="articles"
+                        label="MOD_PRETTYSLIDER_FIELD_SOURCE_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_SOURCE_DESC"
+                        class="btn-group"
+                        validate="options"
+                >
+                    <option value="articles">MOD_PRETTYSLIDER_FIELD_SOURCE_ARTICLES</option>
+                    <option value="manual">MOD_PRETTYSLIDER_FIELD_SOURCE_MANUAL</option>
+                </field>
+                <field
+                        name="slides"
+                        type="subform"
+                        label="MOD_PRETTYSLIDER_FIELD_SLIDES_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_SLIDES_DESC"
+                        multiple="true"
+                        min="0"
+                        max="20"
+                        showon="source:manual"
+                >
+                    <form>
+                        <field
+                                name="image"
+                                type="media"
+                                label="MOD_PRETTYSLIDER_FIELD_SLIDEIMAGE_LABEL"
+                                required="true"
+                        />
+                        <field
+                                name="alt"
+                                type="text"
+                                label="MOD_PRETTYSLIDER_FIELD_SLIDEALT_LABEL"
+                                description="MOD_PRETTYSLIDER_FIELD_SLIDEALT_DESC"
+                        />
+                        <field
+                                name="title"
+                                type="text"
+                                label="MOD_PRETTYSLIDER_FIELD_SLIDETITLE_LABEL"
+                                description="MOD_PRETTYSLIDER_FIELD_SLIDETITLE_DESC"
+                        />
+                        <field
+                                name="description"
+                                type="textarea"
+                                label="MOD_PRETTYSLIDER_FIELD_SLIDEDESC_LABEL"
+                                description="MOD_PRETTYSLIDER_FIELD_SLIDEDESC_DESC"
+                                rows="3"
+                        />
+                        <field
+                                name="link"
+                                type="url"
+                                filter="url"
+                                validate="slideurl"
+                                message="MOD_PRETTYSLIDER_FIELD_SLIDELINK_INVALID"
+                                relative="true"
+                                label="MOD_PRETTYSLIDER_FIELD_SLIDELINK_LABEL"
+                                description="MOD_PRETTYSLIDER_FIELD_SLIDELINK_DESC"
+                        />
+                        <field
+                                name="newwindow"
+                                type="radio"
+                                default="0"
+                                layout="joomla.form.field.radio.switcher"
+                                label="MOD_PRETTYSLIDER_FIELD_SLIDENEWWINDOW_LABEL"
+                                filter="integer"
+                                validate="options"
+                        >
+                            <option value="0">JNO</option>
+                            <option value="1">JYES</option>
+                        </field>
+                    </form>
+                </field>
+                <field
                         name="maxslides"
+                        showon="source:articles"
                         type="number"
                         label="MOD_PRETTYSLIDER_FIELD_MAXSLIDES_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_MAXSLIDES_DESC"
@@ -56,6 +129,7 @@
                 />
                 <field
                         name="desclength"
+                        showon="source:articles"
                         type="number"
                         label="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_DESCLENGTH_DESC"
@@ -67,6 +141,7 @@
                 />
                 <field
                         name="descsource"
+                        showon="source:articles"
                         type="list"
                         label="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_LABEL"
                         description="MOD_PRETTYSLIDER_FIELD_DESCSOURCE_DESC"
@@ -79,6 +154,7 @@
                 </field>
                 <field
                         name="imagepriority"
+                        showon="source:articles"
                         type="radio"
                         default="intro"
                         label="MOD_PRETTYSLIDER_FIELD_IMAGEPRIORITY_LABEL"
@@ -133,6 +209,7 @@
                 />
                 <field
                         name="catid"
+                        showon="source:articles"
                         type="category"
                         label="JCATEGORY"
                         extension="com_content"
@@ -143,6 +220,7 @@
                 />
                 <field
                         name="article_ordering"
+                        showon="source:articles"
                         type="list"
                         label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERING_LABEL"
                         default="a.title"
@@ -165,7 +243,7 @@
                         label="MOD_PRETTYSLIDER_CATEGORY_FIELD_ARTICLEORDERINGDIR_LABEL"
                         default="ASC"
                         validate="options"
-                        showon="article_ordering!:random"
+                        showon="source:articles[AND]article_ordering!:random"
                 >
                     <option value="ASC">MOD_PRETTYSLIDER_CATEGORY_OPTION_ASCENDING_VALUE</option>
                     <option value="DESC">MOD_PRETTYSLIDER_CATEGORY_OPTION_DESCENDING_VALUE</option>

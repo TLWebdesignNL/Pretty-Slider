@@ -21,6 +21,7 @@ use Joomla\Component\Content\Site\Helper\RouteHelper;
 use Joomla\Database\DatabaseAwareInterface;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Registry\Registry;
+use TLWeb\Module\Prettyslider\Site\Rule\SlideurlRule;
 
 \defined('_JEXEC') or die;
 
@@ -68,6 +69,105 @@ class PrettysliderHelper implements DatabaseAwareInterface
      * @since   1.0.0
      */
     public function getSlides(Registry $params, SiteApplication $app): array
+    {
+        if ($params->get('source', 'articles') === 'manual') {
+            return $this->getManualSlides($params);
+        }
+
+        return $this->getArticleSlides($params, $app);
+    }
+
+    /**
+     * Build the slides that were entered in the module settings
+     *
+     * @param   Registry  $params  The module parameters
+     *
+     * @return  array
+     *
+     * @since   1.0.0
+     */
+    private function getManualSlides(Registry $params): array
+    {
+        $rows   = $params->get('slides');
+        $rows   = (\is_object($rows) || \is_array($rows)) ? array_values((array) $rows) : [];
+        $slides = [];
+
+        foreach ($rows as $row) {
+            $row   = (array) $row;
+            $clean = HTMLHelper::_('cleanImageURL', trim((string) ($row['image'] ?? '')));
+            $url   = $this->resolveImageUrl($clean->url);
+
+            // A slide needs an image
+            if ($url === null) {
+                continue;
+            }
+
+            $title = trim((string) ($row['title'] ?? ''));
+            $alt   = trim((string) ($row['alt'] ?? ''));
+
+            $image          = new \stdClass();
+            $image->url     = $url;
+            $image->width   = (int) $clean->attributes['width'];
+            $image->height  = (int) $clean->attributes['height'];
+            $image->caption = '';
+            $image->alt     = $alt !== '' ? $alt : $title;
+
+            $slide              = new \stdClass();
+            $slide->title       = $title;
+            $slide->description = trim((string) ($row['description'] ?? ''));
+            $slide->image       = $image;
+            $slide->link        = $this->getManualLink((string) ($row['link'] ?? ''));
+            $slide->newWindow   = $slide->link !== '' && (int) ($row['newwindow'] ?? 0) === 1;
+
+            $slides[] = $slide;
+        }
+
+        return $slides;
+    }
+
+    /**
+     * Makes the link of a manual slide safe for use in an href: URLs with a scheme that can run script are
+     * dropped (see SlideurlRule), and internal non-SEF links are routed.
+     *
+     * @param   string  $url  The link as stored in the module params
+     *
+     * @return  string  The URL to link to (not HTML-escaped), or an empty string when there is no usable link
+     *
+     * @since   1.0.0
+     */
+    private function getManualLink(string $url): string
+    {
+        $url = trim($url);
+
+        if ($url === '' || !SlideurlRule::isAllowed($url)) {
+            return '';
+        }
+
+        // The url filter saves "index.php?..." as "<site path>/index.php?...", so strip the site path again
+        $rootPath = Uri::root(true);
+
+        if (str_starts_with($url, $rootPath . '/index.php')) {
+            $url = substr($url, \strlen($rootPath) + 1);
+        }
+
+        if (str_starts_with($url, 'index.php')) {
+            $url = Route::_($url, false);
+        }
+
+        return $url;
+    }
+
+    /**
+     * Build the slides from the articles in the selected categories
+     *
+     * @param   Registry         $params  The module parameters
+     * @param   SiteApplication  $app     The application
+     *
+     * @return  array
+     *
+     * @since   1.0.0
+     */
+    private function getArticleSlides(Registry $params, SiteApplication $app): array
     {
         $maxSlides = max(1, (int) $params->get('maxslides', 5));
 
@@ -131,11 +231,12 @@ class PrettysliderHelper implements DatabaseAwareInterface
 
                 if ($access || \in_array($item->access, $authorised)) {
                     // We know that user has the privilege to view the article
-                    $slide->link = Route::_(RouteHelper::getArticleRoute($item->id . ':' . $item->alias, $item->catid, $item->language));
+                    $slide->link = Route::_(RouteHelper::getArticleRoute($item->id . ':' . $item->alias, $item->catid, $item->language), false);
                 } else {
                     $slide->link = $this->getLoginLink($app);
                 }
 
+                $slide->newWindow  = false;
                 $slides[$item->id] = $slide;
 
                 if (\count($slides) >= $maxSlides) {
@@ -266,7 +367,7 @@ class PrettysliderHelper implements DatabaseAwareInterface
      *
      * @param   SiteApplication  $app  The application
      *
-     * @return  string
+     * @return  string  The URL (not HTML-escaped)
      *
      * @since   1.0.0
      */
@@ -277,6 +378,6 @@ class PrettysliderHelper implements DatabaseAwareInterface
         $itemId    = isset($menuitems[0]) ? (int) $menuitems[0]->id : $app->getInput()->getInt('Itemid', 0);
 
         // Use the Itemid of the requesting page only if there is no login menu item
-        return Route::_($link . ($itemId > 0 ? '&Itemid=' . $itemId : ''));
+        return Route::_($link . ($itemId > 0 ? '&Itemid=' . $itemId : ''), false);
     }
 }

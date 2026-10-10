@@ -1,7 +1,7 @@
 # Pretty Slider
 Pretty Slider module for Joomla 5.4 and Joomla 6.
 
-Shows the articles of one or more categories as a slider. Each slide has the article image, the article title with a link to the article, and a short description.
+Shows a slider with an image, a title and a short description per slide. The slides come from the articles of one or more categories, or you create them yourself in the module.
 
 ## Requirements
 - Joomla 5.4 or Joomla 6
@@ -10,6 +10,7 @@ Shows the articles of one or more categories as a slider. Each slide has the art
 
 ## Features
 - Slides from the published articles in the selected categories, or from all categories
+- Or manual slides: add your own slides with an image, alt text, title, description and link
 - Uses the intro image or the full article image, with the other one as fallback; articles without an image are skipped
 - Description from the article text, the image alt text or the image caption, cut off at a length you choose
 - Article ordering and direction, including random
@@ -20,8 +21,10 @@ Shows the articles of one or more categories as a slider. Each slide has the art
 ## Set-up
 1. Install the ZIP through **System → Install → Extensions**.
 2. Create a **Pretty Slider** site module and assign it to a position and menu items.
-3. On the **Settings** tab, select the categories and set the number of slides, ordering and autoplay.
-4. Give the articles an intro image or a full article image, with alt text.
+3. On the **Settings** tab, choose **Articles** or **Manual slides**.
+   - **Articles**: select the categories and set the number of slides and the ordering. Give the articles an intro image or a full article image, with alt text.
+   - **Manual slides**: add a row for each slide.
+4. Set autoplay and the title element.
 
 ## Links
 - [Changelog](changelog.xml)

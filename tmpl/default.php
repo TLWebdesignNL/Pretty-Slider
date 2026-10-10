@@ -57,7 +57,16 @@ $slideCount = count($slides);
                      aria-roledescription="<?php echo Text::_('MOD_PRETTYSLIDER_SLIDE'); ?>"
                      aria-label="<?php echo Text::sprintf('MOD_PRETTYSLIDER_SLIDE_OF', $index + 1, $slideCount); ?>"
                 >
+                    <?php
+                    $link   = $slide->link !== '' ? htmlspecialchars($slide->link, ENT_QUOTES, 'UTF-8') : '';
+                    $target = $slide->newWindow ? ' target="_blank" rel="noopener noreferrer"' : '';
+                    // Without a title the image carries the link, which needs the alt text as its name
+                    $linkImage = $link !== '' && $slide->title === '' && $slide->image->alt !== '';
+                    ?>
                     <div class="w-100 h-100">
+                        <?php if ($linkImage) : ?>
+                            <a href="<?php echo $link; ?>"<?php echo $target; ?>>
+                        <?php endif; ?>
                         <img src="<?php echo htmlspecialchars($slide->image->url, ENT_QUOTES, 'UTF-8'); ?>"
                              alt="<?php echo htmlspecialchars($slide->image->alt, ENT_QUOTES, 'UTF-8'); ?>"
                              class="d-block w-100 h-auto"
@@ -69,16 +78,33 @@ $slideCount = count($slides);
                                 loading="lazy"
                              <?php endif; ?>
                         >
-                        <div class="carousel-caption">
-                            <<?php echo $titleTag; ?> class="h5 prettyslider-title">
-                                <a href="<?php echo $slide->link; ?>">
-                                    <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
-                                </a>
-                            </<?php echo $titleTag; ?>>
-                            <?php if ($slide->description !== '') : ?>
-                                <p class="d-none d-md-block"><?php echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
+                        <?php if ($linkImage) : ?>
+                            <?php if ($slide->newWindow) : ?>
+                                <span class="visually-hidden"><?php echo Text::_('MOD_PRETTYSLIDER_OPENS_NEW_WINDOW'); ?></span>
                             <?php endif; ?>
-                        </div>
+                            </a>
+                        <?php endif; ?>
+                        <?php if ($slide->title !== '' || $slide->description !== '') : ?>
+                            <div class="carousel-caption">
+                                <?php if ($slide->title !== '') : ?>
+                                    <<?php echo $titleTag; ?> class="h5 prettyslider-title">
+                                        <?php if ($link !== '') : ?>
+                                            <a href="<?php echo $link; ?>"<?php echo $target; ?>>
+                                                <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
+                                                <?php if ($slide->newWindow) : ?>
+                                                    <span class="visually-hidden"><?php echo Text::_('MOD_PRETTYSLIDER_OPENS_NEW_WINDOW'); ?></span>
+                                                <?php endif; ?>
+                                            </a>
+                                        <?php else : ?>
+                                            <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php endif; ?>
+                                    </<?php echo $titleTag; ?>>
+                                <?php endif; ?>
+                                <?php if ($slide->description !== '') : ?>
+                                    <p class="d-none d-md-block"><?php echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
+                                <?php endif; ?>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
