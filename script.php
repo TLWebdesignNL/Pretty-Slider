@@ -8,36 +8,43 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// No direct access to this file
 \defined('_JEXEC') or die;
 
+use Joomla\CMS\Installer\InstallerAdapter;
+use Joomla\CMS\Installer\InstallerScriptInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 
 /**
- * Script file of Prettyslider module
+ * Installer script for mod_prettyslider
+ *
+ * @since  1.0.0
  */
-class mod_prettysliderInstallerScript
-{
+return new class () implements InstallerScriptInterface {
     /**
-     * Extension script constructor.
+     * Minimum Joomla version required to install the module.
      *
-     * @return  void
+     * @since  1.0.0
      */
-    public function __construct()
-    {
-        $this->minimumJoomla = '4.0';
-        $this->minimumPhp    = JOOMLA_MINIMUM_PHP;
-    }
+    private const MINIMUM_JOOMLA = '5.4.0';
 
     /**
-     * Method to install the extension
+     * Minimum PHP version required to install the module.
      *
-     * @param   InstallerAdapter  $parent  The class calling this method
+     * @since  1.0.0
+     */
+    private const MINIMUM_PHP = '8.1.0';
+
+    /**
+     * Function called after the extension is installed.
+     *
+     * @param   InstallerAdapter  $adapter  The adapter calling this method
      *
      * @return  boolean  True on success
+     *
+     * @since   1.0.0
      */
-    function install($parent)
+    public function install(InstallerAdapter $adapter): bool
     {
         echo Text::_('MOD_PRETTYSLIDER_INSTALLERSCRIPT_INSTALL');
 
@@ -45,27 +52,15 @@ class mod_prettysliderInstallerScript
     }
 
     /**
-     * Method to uninstall the extension
+     * Function called after the extension is updated.
      *
-     * @param   InstallerAdapter  $parent  The class calling this method
-     *
-     * @return  boolean  True on success
-     */
-    function uninstall($parent)
-    {
-        echo Text::_('MOD_PRETTYSLIDER_INSTALLERSCRIPT_UNINSTALL');
-
-        return true;
-    }
-
-    /**
-     * Method to update the extension
-     *
-     * @param   InstallerAdapter  $parent  The class calling this method
+     * @param   InstallerAdapter  $adapter  The adapter calling this method
      *
      * @return  boolean  True on success
+     *
+     * @since   1.0.0
      */
-    function update($parent)
+    public function update(InstallerAdapter $adapter): bool
     {
         echo Text::_('MOD_PRETTYSLIDER_INSTALLERSCRIPT_UPDATE');
 
@@ -73,49 +68,64 @@ class mod_prettysliderInstallerScript
     }
 
     /**
-     * Function called before extension installation/update/removal procedure commences
+     * Function called after the extension is uninstalled.
      *
-     * @param   string            $type    The type of change (install, update or discover_install, not uninstall)
-     * @param   InstallerAdapter  $parent  The class calling this method
+     * @param   InstallerAdapter  $adapter  The adapter calling this method
      *
      * @return  boolean  True on success
+     *
+     * @since   1.0.0
      */
-    function preflight($type, $parent)
+    public function uninstall(InstallerAdapter $adapter): bool
     {
-        // Check for the minimum PHP version before continuing
-        if (!empty($this->minimumPhp) && version_compare(PHP_VERSION, $this->minimumPhp, '<')) {
-            Log::add(Text::sprintf('JLIB_INSTALLER_MINIMUM_PHP', $this->minimumPhp), Log::WARNING, 'jerror');
-
-            return false;
-        }
-
-        // Check for the minimum Joomla version before continuing
-        if (!empty($this->minimumJoomla) && version_compare(JVERSION, $this->minimumJoomla, '<')) {
-            Log::add(Text::sprintf('JLIB_INSTALLER_MINIMUM_JOOMLA', $this->minimumJoomla), Log::WARNING, 'jerror');
-
-            return false;
-        }
-
-        echo Text::_('MOD_PRETTYSLIDER_INSTALLERSCRIPT_PREFLIGHT');
+        echo Text::_('MOD_PRETTYSLIDER_INSTALLERSCRIPT_UNINSTALL');
 
         return true;
     }
 
     /**
-     * Function called after extension installation/update/removal procedure commences
+     * Function called before the extension is installed, updated or removed.
      *
-     * @param   string            $type    The type of change (install, update or discover_install, not uninstall)
-     * @param   InstallerAdapter  $parent  The class calling this method
+     * @param   string            $type     The type of change (install, update, discover_install or uninstall)
+     * @param   InstallerAdapter  $adapter  The adapter calling this method
      *
      * @return  boolean  True on success
+     *
+     * @since   1.0.0
      */
-    function postflight($type, $parent)
+    public function preflight(string $type, InstallerAdapter $adapter): bool
     {
-        if ($type == "update") {
-            echo Text::_('MOD_PRETTYSLIDER_INSTALLERSCRIPT_RESAVE_MODULE');
+        if ($type === 'uninstall') {
+            return true;
         }
-        echo Text::_('MOD_PRETTYSLIDER_INSTALLERSCRIPT_POSTFLIGHT');
+
+        if (version_compare(PHP_VERSION, self::MINIMUM_PHP, '<')) {
+            Log::add(Text::sprintf('JLIB_INSTALLER_MINIMUM_PHP', self::MINIMUM_PHP), Log::WARNING, 'jerror');
+
+            return false;
+        }
+
+        if (version_compare(JVERSION, self::MINIMUM_JOOMLA, '<')) {
+            Log::add(Text::sprintf('JLIB_INSTALLER_MINIMUM_JOOMLA', self::MINIMUM_JOOMLA), Log::WARNING, 'jerror');
+
+            return false;
+        }
 
         return true;
     }
-}
+
+    /**
+     * Function called after the extension is installed, updated or removed.
+     *
+     * @param   string            $type     The type of change (install, update, discover_install or uninstall)
+     * @param   InstallerAdapter  $adapter  The adapter calling this method
+     *
+     * @return  boolean  True on success
+     *
+     * @since   1.0.0
+     */
+    public function postflight(string $type, InstallerAdapter $adapter): bool
+    {
+        return true;
+    }
+};
