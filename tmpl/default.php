@@ -20,6 +20,8 @@ use Joomla\CMS\Language\Text;
  * @var  string     $titleTag
  * @var  boolean    $autoplay
  * @var  integer    $interval
+ * @var  boolean    $progress
+ * @var  boolean    $indicators
  * @var  string     $moduleclassSfx
  * @var  string     $mainDivClass
  * @var  string     $titleClass
@@ -31,7 +33,7 @@ HTMLHelper::_('bootstrap.carousel', '#' . $sliderId, ['interval' => $interval, '
 
 $slideCount = count($slides);
 ?>
-<div class="<?php echo htmlspecialchars(trim('mod-prettyslider prettySliderWrapper ' . $moduleclassSfx . ' ' . $mainDivClass), ENT_QUOTES, 'UTF-8'); ?>">
+<div class="<?php echo htmlspecialchars(trim('mod-prettyslider prettySliderWrapper ' . ($indicators ? 'has-indicators ' : '') . $moduleclassSfx . ' ' . $mainDivClass), ENT_QUOTES, 'UTF-8'); ?>">
     <div id="<?php echo $sliderId; ?>"
          class="carousel slide"
          role="region"
@@ -39,8 +41,12 @@ $slideCount = count($slides);
          aria-label="<?php echo htmlspecialchars($module->title, ENT_QUOTES, 'UTF-8'); ?>"
          <?php if ($autoplay) : ?>
             data-prettyslider
+            style="--prettyslider-interval: <?php echo (int) $interval; ?>ms;"
          <?php endif; ?>
     >
+        <?php if ($progress) : ?>
+            <div class="prettyslider-progress" aria-hidden="true"><span class="prettyslider-progress-bar"></span></div>
+        <?php endif; ?>
         <?php if ($autoplay) : ?>
             <button class="prettyslider-toggle"
                     type="button"
@@ -124,6 +130,21 @@ $slideCount = count($slides);
                 </div>
             <?php endforeach; ?>
         </div>
+        <?php if ($indicators) : ?>
+            <div class="carousel-indicators">
+                <?php foreach ($slides as $index => $slide) : ?>
+                    <button type="button"
+                            data-bs-target="#<?php echo $sliderId; ?>"
+                            data-bs-slide-to="<?php echo $index; ?>"
+                            aria-label="<?php echo Text::sprintf('MOD_PRETTYSLIDER_GO_TO_SLIDE', $index + 1); ?>"
+                            <?php if ($index === 0) : ?>
+                                class="active"
+                                aria-current="true"
+                            <?php endif; ?>
+                    ></button>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
         <?php if ($slideCount > 1) : ?>
             <button class="carousel-control-prev"
                     type="button"

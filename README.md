@@ -17,6 +17,7 @@ Shows a slider with an image, a title and a short description per slide. The sli
 - Description from the article text, the image alt text or the image caption, cut off at a length you choose
 - Article ordering and direction, including random
 - Autoplay with a pause button and a setting for the seconds per slide; autoplay does not start for visitors who prefer reduced motion
+- Optional bullets to go to a slide, and an optional progress line that fills up until the next slide
 - Image alt text, labelled slides and a title element you choose, so the slider works with screen readers and fits the heading structure of the page
 - English and Dutch
 

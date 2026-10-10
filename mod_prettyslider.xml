@@ -319,6 +319,33 @@
                         showon="autoplay:1"
                 />
                 <field
+                        name="progress"
+                        type="radio"
+                        default="1"
+                        layout="joomla.form.field.radio.switcher"
+                        label="MOD_PRETTYSLIDER_FIELD_PROGRESS_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_PROGRESS_DESC"
+                        filter="integer"
+                        validate="options"
+                        showon="autoplay:1"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field
+                        name="indicators"
+                        type="radio"
+                        default="1"
+                        layout="joomla.form.field.radio.switcher"
+                        label="MOD_PRETTYSLIDER_FIELD_INDICATORS_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_INDICATORS_DESC"
+                        filter="integer"
+                        validate="options"
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
+                <field
                         name="catid"
                         showon="source:articles"
                         type="category"

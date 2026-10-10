@@ -8,12 +8,13 @@
  *
  * The Bootstrap carousel is created without "ride" and "pause" options, so this script decides when the
  * slides rotate: not when the visitor prefers reduced motion, not while the pointer or keyboard focus is
- * on the slider, and not after the visitor pressed pause.
+ * on the slider, and not after the visitor pressed pause. An optional line at the top shows the time left.
  */
 const initSlider = (slider) => {
   const Carousel = window.bootstrap?.Carousel;
   const button = slider.querySelector('[data-prettyslider-toggle]');
   const inner = slider.querySelector('.carousel-inner');
+  const progress = slider.querySelector('.prettyslider-progress');
 
   if (!Carousel || !button) {
     return;
@@ -24,12 +25,31 @@ const initSlider = (slider) => {
   let hover = false;
   let focus = false;
 
+  // The progress line fills up during one interval, so it starts again whenever the interval does
+  const showProgress = (running) => {
+    if (!progress) {
+      return;
+    }
+
+    progress.classList.remove('is-running');
+
+    if (running) {
+      // Reading the width makes the browser restart the animation
+      progress.getBoundingClientRect();
+      progress.classList.add('is-running');
+    }
+  };
+
   const apply = () => {
-    if (playing && !hover && !focus) {
+    const running = playing && !hover && !focus;
+
+    if (running) {
       carousel.cycle();
     } else {
       carousel.pause();
     }
+
+    showProgress(running);
   };
 
   const render = () => {
@@ -71,6 +91,9 @@ const initSlider = (slider) => {
     focus = focus && slider.contains(event.relatedTarget);
     apply();
   });
+
+  // The line is empty while the slides change
+  slider.addEventListener('slide.bs.carousel', () => showProgress(false));
 
   // Bootstrap stops the rotation after a swipe, so restore the wanted state after each slide
   slider.addEventListener('slid.bs.carousel', apply);

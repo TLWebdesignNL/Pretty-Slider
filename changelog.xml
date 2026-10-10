@@ -14,6 +14,7 @@
             <item>Class settings for the main div, the slide title and the slide description.</item>
             <item>Settings for the number of slides, article ordering and direction, image priority, description source and length, and the title element.</item>
             <item>Autoplay with a pause button and a setting for the seconds per slide. Autoplay does not start for visitors who prefer reduced motion.</item>
+            <item>Optional bullets at the bottom to go to a slide, and an optional line at the top that shows the time until the next slide.</item>
             <item>English and Dutch language files.</item>
         </addition>
     </changelog>
