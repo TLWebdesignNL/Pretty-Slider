@@ -17,7 +17,8 @@
   background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
 }
 
-.mod-prettyslider .carousel-caption a {
+/* Buttons keep the colours of their Bootstrap class */
+.mod-prettyslider .carousel-caption a:not(.btn) {
   color: #fff;
 }
 
@@ -31,16 +32,6 @@
 
 .mod-prettyslider .carousel-caption > :last-child {
   margin-bottom: 0;
-}
-
-/* Bootstrap button colours must win over the white caption links */
-.mod-prettyslider .carousel-caption a.btn {
-  color: var(--bs-btn-color);
-}
-
-.mod-prettyslider .carousel-caption a.btn:hover,
-.mod-prettyslider .carousel-caption a.btn:focus-visible {
-  color: var(--bs-btn-hover-color);
 }
 
 .mod-prettyslider .prettyslider-toggle {
@@ -96,13 +87,15 @@
 }
 
 .mod-prettyslider .carousel-indicators [data-bs-target] {
-  width: 0.75rem;
-  height: 0.75rem;
+  box-sizing: border-box;
+  width: 0.875rem;
+  height: 0.875rem;
   margin: 0 0.3rem;
   background-color: #fff;
-  border-top: 0.5rem solid transparent;
-  border-bottom: 0.5rem solid transparent;
+  background-clip: border-box;
+  border: 0;
   border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.5);
 }
 
 .mod-prettyslider .carousel-indicators [data-bs-target]:focus-visible {

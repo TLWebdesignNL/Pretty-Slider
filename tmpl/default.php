@@ -20,6 +20,7 @@ use Joomla\CMS\Language\Text;
  * @var  string     $titleTag
  * @var  boolean    $autoplay
  * @var  integer    $interval
+ * @var  boolean    $pauseButton
  * @var  boolean    $progress
  * @var  boolean    $indicators
  * @var  string     $moduleclassSfx
@@ -47,7 +48,7 @@ $slideCount = count($slides);
         <?php if ($progress) : ?>
             <div class="prettyslider-progress" aria-hidden="true"><span class="prettyslider-progress-bar"></span></div>
         <?php endif; ?>
-        <?php if ($autoplay) : ?>
+        <?php if ($pauseButton) : ?>
             <button class="prettyslider-toggle"
                     type="button"
                     hidden

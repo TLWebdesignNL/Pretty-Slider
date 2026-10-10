@@ -16,7 +16,7 @@ const initSlider = (slider) => {
   const inner = slider.querySelector('.carousel-inner');
   const progress = slider.querySelector('.prettyslider-progress');
 
-  if (!Carousel || !button) {
+  if (!Carousel) {
     return;
   }
 
@@ -53,6 +53,11 @@ const initSlider = (slider) => {
   };
 
   const render = () => {
+    // The pause button is optional
+    if (!button) {
+      return;
+    }
+
     button.setAttribute('aria-label', playing ? button.dataset.labelPause : button.dataset.labelPlay);
     button.classList.toggle('is-paused', !playing);
 
@@ -60,7 +65,7 @@ const initSlider = (slider) => {
     inner?.setAttribute('aria-live', playing ? 'off' : 'polite');
   };
 
-  button.addEventListener('click', () => {
+  button?.addEventListener('click', () => {
     playing = !playing;
 
     // Pressing play is an explicit request, so start even though pointer or focus is on the slider
@@ -98,7 +103,10 @@ const initSlider = (slider) => {
   // Bootstrap stops the rotation after a swipe, so restore the wanted state after each slide
   slider.addEventListener('slid.bs.carousel', apply);
 
-  button.hidden = false;
+  if (button) {
+    button.hidden = false;
+  }
+
   render();
   apply();
 };
