@@ -58,6 +58,7 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         $data['titleTag']         = \in_array($titleTag, self::TITLE_TAGS, true) ? $titleTag : 'p';
         $data['autoplay']         = \count($slides) > 1 && (bool) $params->get('autoplay', 1);
         $data['interval']         = min(60, max(2, (int) $params->get('interval', 5))) * 1000;
+        $data['pauseOnHover']     = (bool) $params->get('pauseonhover', 1);
         $data['pauseButton']      = $data['autoplay'] && (bool) $params->get('pausebutton', 1);
         $data['progress']         = $data['autoplay'] && (bool) $params->get('progress', 1);
         $data['indicators']       = \count($slides) > 1 && (bool) $params->get('indicators', 1);

@@ -20,6 +20,7 @@ use Joomla\CMS\Language\Text;
  * @var  string     $titleTag
  * @var  boolean    $autoplay
  * @var  integer    $interval
+ * @var  boolean    $pauseOnHover
  * @var  boolean    $pauseButton
  * @var  boolean    $progress
  * @var  boolean    $indicators
@@ -42,6 +43,7 @@ $slideCount = count($slides);
          aria-label="<?php echo htmlspecialchars($module->title, ENT_QUOTES, 'UTF-8'); ?>"
          <?php if ($autoplay) : ?>
             data-prettyslider
+            data-prettyslider-hover="<?php echo $pauseOnHover ? '1' : '0'; ?>"
             style="--prettyslider-interval: <?php echo (int) $interval; ?>ms;"
          <?php endif; ?>
     >

@@ -7,8 +7,8 @@
  * Autoplay for Pretty Slider with a pause/play button.
  *
  * The Bootstrap carousel is created without "ride" and "pause" options, so this script decides when the
- * slides rotate: not when the visitor prefers reduced motion, not while the pointer or keyboard focus is
- * on the slider, and not after the visitor pressed pause. An optional line at the top shows the time left.
+ * slides rotate: not when the visitor prefers reduced motion, not while keyboard focus (and, unless turned
+ * off, the pointer) is on the slider, and not after the visitor pressed pause. An optional line at the top shows the time left.
  */
 const initSlider = (slider) => {
   const Carousel = window.bootstrap?.Carousel;
@@ -76,15 +76,18 @@ const initSlider = (slider) => {
     apply();
   });
 
-  slider.addEventListener('mouseenter', () => {
-    hover = true;
-    apply();
-  });
+  // Waiting while the pointer is on the slider is a setting; a large slider is easily under the pointer
+  if (slider.dataset.prettysliderHover !== '0') {
+    slider.addEventListener('mouseenter', () => {
+      hover = true;
+      apply();
+    });
 
-  slider.addEventListener('mouseleave', () => {
-    hover = false;
-    apply();
-  });
+    slider.addEventListener('mouseleave', () => {
+      hover = false;
+      apply();
+    });
+  }
 
   slider.addEventListener('focusin', (event) => {
     // Only keyboard focus stops the rotation, a mouse click on a control does not
