@@ -23,4 +23,27 @@
         <targetplatform name="joomla" version="(5\.4|6\.[0-9]+)\..*"/>
         <client>site</client>
     </update>
+    <update>
+        <name>Pretty Slider 1.1.0</name>
+        <description>Pretty Slider module for Joomla 5.4 and Joomla 6.</description>
+        <element>mod_prettyslider</element>
+        <type>module</type>
+        <version>1.1.0</version>
+        <downloads>
+            <downloadurl type="full" format="zip">
+                https://github.com/TLWebdesignNL/Pretty-Slider/releases/download/V1.1.0/mod_prettyslider-1.1.0.zip
+            </downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <sha256>bbc354d7d8c5a878952d3f267f06597123b01e08f61265a10d26a826cf2a9725</sha256>
+        <maintainer>TLWebdesign</maintainer>
+        <maintainerurl>https://www.tlwebdesign.nl</maintainerurl>
+        <infourl title="Pretty Slider changelog">https://github.com/TLWebdesignNL/Pretty-Slider/blob/main/changelog.xml</infourl>
+        <changelogurl>https://raw.githubusercontent.com/TLWebdesignNL/Pretty-Slider/main/changelog.xml</changelogurl>
+        <section>Updates</section>
+        <targetplatform name="joomla" version="(5\.4|6\.[0-9]+)\..*"/>
+        <client>site</client>
+    </update>
 </updates>
