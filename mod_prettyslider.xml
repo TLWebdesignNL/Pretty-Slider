@@ -322,22 +322,6 @@
                         description="MOD_PRETTYSLIDER_FIELD_MAINDIVCLASS_DESC"
                 />
                 <field
-                        name="titlesize"
-                        type="list"
-                        label="MOD_PRETTYSLIDER_FIELD_TITLESIZE_LABEL"
-                        description="MOD_PRETTYSLIDER_FIELD_TITLESIZE_DESC"
-                        default="h5"
-                        validate="options"
-                >
-                    <option value="none">MOD_PRETTYSLIDER_FIELD_TITLESIZE_NONE</option>
-                    <option value="h1">h1</option>
-                    <option value="h2">h2</option>
-                    <option value="h3">h3</option>
-                    <option value="h4">h4</option>
-                    <option value="h5">h5</option>
-                    <option value="h6">h6</option>
-                </field>
-                <field
                         name="titleclass"
                         type="text"
                         label="MOD_PRETTYSLIDER_FIELD_TITLECLASS_LABEL"

@@ -26,6 +26,13 @@
   margin-bottom: 0.25rem;
 }
 
+/* The look of the title while it has no classes of its own */
+.mod-prettyslider .prettyslider-title-default {
+  font-size: 1.25rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
 .mod-prettyslider .carousel-caption p {
   margin-bottom: 0.5rem;
 }
