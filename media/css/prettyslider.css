@@ -25,8 +25,22 @@
   margin-bottom: 0.25rem;
 }
 
-.mod-prettyslider .carousel-caption p:last-child {
+.mod-prettyslider .carousel-caption p {
+  margin-bottom: 0.5rem;
+}
+
+.mod-prettyslider .carousel-caption > :last-child {
   margin-bottom: 0;
+}
+
+/* Bootstrap button colours must win over the white caption links */
+.mod-prettyslider .carousel-caption a.btn {
+  color: var(--bs-btn-color);
+}
+
+.mod-prettyslider .carousel-caption a.btn:hover,
+.mod-prettyslider .carousel-caption a.btn:focus-visible {
+  color: var(--bs-btn-hover-color);
 }
 
 .mod-prettyslider .prettyslider-toggle {

@@ -14,6 +14,7 @@ use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\HTML\Helpers\StringHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Component\Content\Administrator\Extension\ContentComponent;
@@ -118,11 +119,39 @@ class PrettysliderHelper implements DatabaseAwareInterface
             $slide->image       = $image;
             $slide->link        = $this->getManualLink((string) ($row['link'] ?? ''));
             $slide->newWindow   = $slide->link !== '' && (int) ($row['newwindow'] ?? 0) === 1;
+            $slide->button      = $slide->link !== ''
+                ? $this->getButton((string) ($row['buttontext'] ?? ''), (string) ($row['buttonclass'] ?? ''))
+                : null;
 
             $slides[] = $slide;
         }
 
         return $slides;
+    }
+
+    /**
+     * Build the button of a slide
+     *
+     * @param   string  $text   The button text
+     * @param   string  $class  The Bootstrap button classes, such as "btn-primary"
+     *
+     * @return  \stdClass|null  The button, or null without a text
+     *
+     * @since   1.0.0
+     */
+    private function getButton(string $text, string $class): ?\stdClass
+    {
+        $text = trim($text);
+
+        if ($text === '') {
+            return null;
+        }
+
+        $button        = new \stdClass();
+        $button->text  = $text;
+        $button->class = trim(preg_replace('/[^A-Za-z0-9 _-]/', '', $class) ?? '') ?: 'btn-primary';
+
+        return $button;
     }
 
     /**
@@ -201,6 +230,17 @@ class PrettysliderHelper implements DatabaseAwareInterface
 
         $slides = [];
 
+        // The same button on every slide, linking to the article
+        $button = null;
+
+        if ((int) $params->get('articlebutton', 0) === 1) {
+            $buttonText = trim((string) $params->get('articlebuttontext', ''));
+            $button     = $this->getButton(
+                $buttonText !== '' ? $buttonText : Text::_('MOD_PRETTYSLIDER_READ_MORE'),
+                (string) $params->get('articlebuttonclass', 'btn-primary')
+            );
+        }
+
         // Articles without an image are skipped, so keep loading batches until there are enough slides
         for ($batch = 0; $batch < self::MAX_BATCHES && \count($slides) < $maxSlides; $batch++) {
             $articles->setState('list.start', $batch * $maxSlides);
@@ -237,6 +277,7 @@ class PrettysliderHelper implements DatabaseAwareInterface
                 }
 
                 $slide->newWindow  = false;
+                $slide->button     = $button;
                 $slides[$item->id] = $slide;
 
                 if (\count($slides) >= $maxSlides) {

@@ -60,8 +60,8 @@ $slideCount = count($slides);
                     <?php
                     $link   = $slide->link !== '' ? htmlspecialchars($slide->link, ENT_QUOTES, 'UTF-8') : '';
                     $target = $slide->newWindow ? ' target="_blank" rel="noopener noreferrer"' : '';
-                    // Without a title the image carries the link, which needs the alt text as its name
-                    $linkImage = $link !== '' && $slide->title === '' && $slide->image->alt !== '';
+                    // Without a title or button the image carries the link, which needs the alt text as its name
+                    $linkImage = $link !== '' && $slide->title === '' && !$slide->button && $slide->image->alt !== '';
                     ?>
                     <div class="w-100 h-100">
                         <?php if ($linkImage) : ?>
@@ -84,7 +84,7 @@ $slideCount = count($slides);
                             <?php endif; ?>
                             </a>
                         <?php endif; ?>
-                        <?php if ($slide->title !== '' || $slide->description !== '') : ?>
+                        <?php if ($slide->title !== '' || $slide->description !== '' || $slide->button) : ?>
                             <div class="carousel-caption">
                                 <?php if ($slide->title !== '') : ?>
                                     <<?php echo $titleTag; ?> class="h5 prettyslider-title">
@@ -102,6 +102,18 @@ $slideCount = count($slides);
                                 <?php endif; ?>
                                 <?php if ($slide->description !== '') : ?>
                                     <p class="d-none d-md-block"><?php echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
+                                <?php endif; ?>
+                                <?php if ($slide->button && $link !== '') : ?>
+                                    <a href="<?php echo $link; ?>"<?php echo $target; ?>
+                                       class="btn <?php echo htmlspecialchars($slide->button->class, ENT_QUOTES, 'UTF-8'); ?> prettyslider-button">
+                                        <?php echo htmlspecialchars($slide->button->text, ENT_QUOTES, 'UTF-8'); ?>
+                                        <?php if ($slide->title !== '') : ?>
+                                            <span class="visually-hidden">: <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?></span>
+                                        <?php endif; ?>
+                                        <?php if ($slide->newWindow) : ?>
+                                            <span class="visually-hidden"><?php echo Text::_('MOD_PRETTYSLIDER_OPENS_NEW_WINDOW'); ?></span>
+                                        <?php endif; ?>
+                                    </a>
                                 <?php endif; ?>
                             </div>
                         <?php endif; ?>
