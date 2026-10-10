@@ -247,7 +247,8 @@ class PrettysliderHelper implements DatabaseAwareInterface
     private function getDescription(object $item, \stdClass $image, Registry $params): string
     {
         $text = match ((string) $params->get('descsource', 'articletext')) {
-            'articletext'  => (string) $item->introtext,
+            // Plugin tags such as {loadposition x} are not processed here, so leave them out
+            'articletext'  => preg_replace('/\{\/?[a-z][a-z0-9_-]*(\s[^{}]*)?\}/i', '', (string) $item->introtext) ?? '',
             'imagealt'     => $image->alt,
             'imagecaption' => $image->caption,
             default        => '',

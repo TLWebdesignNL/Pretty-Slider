@@ -8,7 +8,7 @@
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-defined('_JEXEC') or die;
+\defined('_JEXEC') or die;
 
 use Joomla\CMS\Extension\Service\Provider\HelperFactory;
 use Joomla\CMS\Extension\Service\Provider\Module;
@@ -31,7 +31,7 @@ return new class () implements ServiceProviderInterface {
      *
      * @since   1.0.0
      */
-    public function register(Container $container) :void
+    public function register(Container $container): void
     {
         $container->registerServiceProvider(new ModuleDispatcherFactory('\\TLWeb\\Module\\Prettyslider'));
         $container->registerServiceProvider(new HelperFactory('\\TLWeb\\Module\\Prettyslider\\Site\\Helper'));
