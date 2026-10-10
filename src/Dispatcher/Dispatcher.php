@@ -34,6 +34,13 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
     private const TITLE_TAGS = ['p', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
     /**
+     * Bootstrap heading classes that set the size of the slide title.
+     *
+     * @since  1.0.0
+     */
+    private const TITLE_SIZES = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+    /**
      * Returns the layout data.
      *
      * @return  array|false  The layout data, or false when there is nothing to show
@@ -51,7 +58,8 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
             return false;
         }
 
-        $titleTag = (string) $params->get('titletag', 'p');
+        $titleTag  = (string) $params->get('titletag', 'p');
+        $titleSize = (string) $params->get('titlesize', 'h5');
 
         $data['slides']           = $slides;
         $data['sliderId']         = 'prettySliderCarousel' . (int) $this->module->id;
@@ -64,7 +72,10 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         $data['indicators']       = \count($slides) > 1 && (bool) $params->get('indicators', 1);
         $data['moduleclassSfx']   = trim((string) $params->get('moduleclass_sfx', ''));
         $data['mainDivClass']     = PrettysliderHelper::cleanClass((string) $params->get('maindivclass', ''));
-        $data['titleClass']       = PrettysliderHelper::cleanClass((string) $params->get('titleclass', 'h5'));
+        $data['titleClass']       = trim(
+            (\in_array($titleSize, self::TITLE_SIZES, true) ? $titleSize . ' ' : '')
+            . PrettysliderHelper::cleanClass((string) $params->get('titleclass', ''))
+        );
         $data['descriptionClass'] = trim(
             ((int) $params->get('hidedescmobile', 1) === 1 ? 'd-none d-md-block ' : '')
             . PrettysliderHelper::cleanClass((string) $params->get('descriptionclass', ''))
