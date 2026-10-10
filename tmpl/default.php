@@ -27,7 +27,7 @@ HTMLHelper::_('bootstrap.carousel', '#' . $sliderId, ['interval' => $interval, '
 
 $slideCount = count($slides);
 ?>
-<div class="prettySliderWrapper">
+<div class="mod-prettyslider prettySliderWrapper">
     <div id="<?php echo $sliderId; ?>"
          class="carousel slide"
          role="region"
@@ -36,7 +36,7 @@ $slideCount = count($slides);
          <?php if ($autoplay) : ?>
             data-prettyslider
          <?php endif; ?>
-         style="max-height">
+    >
         <?php if ($autoplay) : ?>
             <button class="prettyslider-toggle"
                     type="button"
@@ -55,17 +55,22 @@ $slideCount = count($slides);
                      role="group"
                      aria-roledescription="<?php echo Text::_('MOD_PRETTYSLIDER_SLIDE'); ?>"
                      aria-label="<?php echo Text::sprintf('MOD_PRETTYSLIDER_SLIDE_OF', $index + 1, $slideCount); ?>"
-                     style="flex: 0 0 100%;">
+                >
                     <div class="w-100 h-100">
                         <img src="<?php echo htmlspecialchars($slide->image->url, ENT_QUOTES, 'UTF-8'); ?>"
                              alt="<?php echo htmlspecialchars($slide->image->alt, ENT_QUOTES, 'UTF-8'); ?>"
-                             class="w-100 h-auto"
-                             width="<?php echo $slide->image->width; ?>"
-                             height="<?php echo $slide->image->height; ?>"
+                             class="d-block w-100 h-auto"
+                             <?php if ($slide->image->width > 0 && $slide->image->height > 0) : ?>
+                                width="<?php echo $slide->image->width; ?>"
+                                height="<?php echo $slide->image->height; ?>"
+                             <?php endif; ?>
+                             <?php if ($index > 0) : ?>
+                                loading="lazy"
+                             <?php endif; ?>
                         >
                         <div class="carousel-caption">
-                            <<?php echo $titleTag; ?> class="h5">
-                                <a href="<?php echo $slide->link; ?>" class="text-white">
+                            <<?php echo $titleTag; ?> class="h5 prettyslider-title">
+                                <a href="<?php echo $slide->link; ?>">
                                     <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
                                 </a>
                             </<?php echo $titleTag; ?>>

@@ -58,9 +58,11 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
         $data['autoplay'] = \count($slides) > 1 && (bool) $params->get('autoplay', 1);
         $data['interval'] = min(60, max(2, (int) $params->get('interval', 5))) * 1000;
 
+        $wa = $data['app']->getDocument()->getWebAssetManager();
+        $wa->getRegistry()->addExtensionRegistryFile('mod_prettyslider');
+        $wa->useStyle('mod_prettyslider.slider');
+
         if ($data['autoplay']) {
-            $wa = $data['app']->getDocument()->getWebAssetManager();
-            $wa->getRegistry()->addExtensionRegistryFile('mod_prettyslider');
             $wa->useScript('mod_prettyslider.slider');
         }
 

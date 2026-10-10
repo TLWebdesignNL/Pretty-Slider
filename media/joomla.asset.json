@@ -14,6 +14,11 @@
       "attributes": {
         "type": "module"
       }
+    },
+    {
+      "name": "mod_prettyslider.slider",
+      "type": "style",
+      "uri": "mod_prettyslider/prettyslider.css"
     }
   ]
 }
