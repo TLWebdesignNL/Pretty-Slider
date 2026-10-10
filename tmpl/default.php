@@ -13,74 +13,73 @@
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
+/**
+ * @var  \stdClass  $module
+ * @var  array      $slides
+ * @var  string     $sliderId
+ * @var  string     $titleTag
+ * @var  boolean    $autoplay
+ */
+
 HTMLHelper::_('bootstrap.carousel', 'prettySliderCarousel' . $module->id);
 
-$slideCounter = 0;
-$autoPlay = $params->get("autoplay", null);
+$slideCount = count($slides);
 ?>
 <div class="prettySliderWrapper">
-    <div id="prettySliderCarousel<?php echo $module->id; ?>"
+    <div id="<?php echo $sliderId; ?>"
          class="carousel slide"
-         <?php if (!empty($autoPlay)) : ?>
+         role="region"
+         aria-roledescription="<?php echo Text::_('MOD_PRETTYSLIDER_CAROUSEL'); ?>"
+         aria-label="<?php echo htmlspecialchars($module->title, ENT_QUOTES, 'UTF-8'); ?>"
+         <?php if ($autoplay) : ?>
             data-bs-ride="carousel"
          <?php endif; ?>
          style="max-height">
         <div class="carousel-inner">
-            <?php
-            foreach ($slides as $slide) :
-                ?>
-                <div class="carousel-item <?php
-                echo ($slideCounter == 0) ? 'active' : ''; ?>"
+            <?php foreach ($slides as $index => $slide) : ?>
+                <div class="carousel-item<?php echo $index === 0 ? ' active' : ''; ?>"
+                     role="group"
+                     aria-roledescription="<?php echo Text::_('MOD_PRETTYSLIDER_SLIDE'); ?>"
+                     aria-label="<?php echo Text::sprintf('MOD_PRETTYSLIDER_SLIDE_OF', $index + 1, $slideCount); ?>"
                      style="flex: 0 0 100%;">
                     <div class="w-100 h-100">
-                        <img src="<?php
-                        echo htmlspecialchars($slide->image->url, ENT_QUOTES, 'UTF-8'); ?>"
-                             alt="<?php
-                                echo htmlspecialchars($slide->image->alt, ENT_QUOTES, 'UTF-8'); ?>"
+                        <img src="<?php echo htmlspecialchars($slide->image->url, ENT_QUOTES, 'UTF-8'); ?>"
+                             alt="<?php echo htmlspecialchars($slide->image->alt, ENT_QUOTES, 'UTF-8'); ?>"
                              class="w-100 h-auto"
-                             width="<?php
-                                echo $slide->image->width; ?>"
-                             height="<?php
-                                echo $slide->image->height; ?>"
+                             width="<?php echo $slide->image->width; ?>"
+                             height="<?php echo $slide->image->height; ?>"
                         >
                         <div class="carousel-caption">
-                            <h5>
-                                <a href="<?php
-                                echo $slide->link; ?>" class="text-white">
-                                    <?php
-                                    echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
+                            <<?php echo $titleTag; ?> class="h5">
+                                <a href="<?php echo $slide->link; ?>" class="text-white">
+                                    <?php echo htmlspecialchars($slide->title, ENT_QUOTES, 'UTF-8'); ?>
                                 </a>
-                            </h5>
-                            <p class="d-none d-md-block"><?php
-                                echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
+                            </<?php echo $titleTag; ?>>
+                            <?php if ($slide->description !== '') : ?>
+                                <p class="d-none d-md-block"><?php echo htmlspecialchars($slide->description, ENT_QUOTES, 'UTF-8'); ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <?php
-                $slideCounter++; ?>
-            <?php
-            endforeach; ?>
+            <?php endforeach; ?>
         </div>
-        <button
-                class="carousel-control-prev"
-                type="button"
-                data-bs-target="#prettySliderCarousel<?php
-                echo $module->id; ?>"
-                data-bs-slide="prev"
-        >
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden"><?php
-                echo Text::_('JPREVIOUS'); ?></span>
-        </button>
-        <button class="carousel-control-next"
-                type="button"
-                data-bs-target="#prettySliderCarousel<?php
-                echo $module->id; ?>"
-                data-bs-slide="next"
-        >
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden"><?php
-                echo Text::_('JNEXT'); ?></span>
-        </button>
+        <?php if ($slideCount > 1) : ?>
+            <button class="carousel-control-prev"
+                    type="button"
+                    data-bs-target="#<?php echo $sliderId; ?>"
+                    data-bs-slide="prev"
+            >
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"><?php echo Text::_('JPREVIOUS'); ?></span>
+            </button>
+            <button class="carousel-control-next"
+                    type="button"
+                    data-bs-target="#<?php echo $sliderId; ?>"
+                    data-bs-slide="next"
+            >
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden"><?php echo Text::_('JNEXT'); ?></span>
+            </button>
+        <?php endif; ?>
     </div>
 </div>

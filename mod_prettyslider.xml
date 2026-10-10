@@ -83,6 +83,21 @@
                     <option value="fulltext">MOD_PRETTYSLIDER_FULLTEXTIMAGE</option>
                 </field>
                 <field
+                        name="titletag"
+                        type="list"
+                        label="MOD_PRETTYSLIDER_FIELD_TITLETAG_LABEL"
+                        description="MOD_PRETTYSLIDER_FIELD_TITLETAG_DESC"
+                        default="p"
+                        validate="options"
+                >
+                    <option value="p">MOD_PRETTYSLIDER_FIELD_TITLETAG_PARAGRAPH</option>
+                    <option value="h2">h2</option>
+                    <option value="h3">h3</option>
+                    <option value="h4">h4</option>
+                    <option value="h5">h5</option>
+                    <option value="h6">h6</option>
+                </field>
+                <field
                         name="autoplay"
                         type="radio"
                         default="1"

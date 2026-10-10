@@ -26,16 +26,37 @@ class Dispatcher extends AbstractModuleDispatcher implements HelperFactoryAwareI
     use HelperFactoryAwareTrait;
 
     /**
+     * Elements that can be used for the slide title.
+     *
+     * @since  1.0.0
+     */
+    private const TITLE_TAGS = ['p', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+    /**
      * Returns the layout data.
      *
-     * @return  array
+     * @return  array|false  The layout data, or false when there is nothing to show
      *
      * @since   1.0.0
      */
-    protected function getLayoutData(): array
+    protected function getLayoutData()
     {
-        $data = parent::getLayoutData();
-        $data['slides'] = $this->getHelperFactory()->getHelper('PrettysliderHelper')->getSlides($data['params'], $this->getApplication());
+        $data   = parent::getLayoutData();
+        $params = $data['params'];
+        $slides = $this->getHelperFactory()->getHelper('PrettysliderHelper')->getSlides($params, $data['app']);
+
+        // Without slides there is nothing to show
+        if (!$slides) {
+            return false;
+        }
+
+        $titleTag = (string) $params->get('titletag', 'p');
+
+        $data['slides']   = $slides;
+        $data['sliderId'] = 'prettySliderCarousel' . (int) $this->module->id;
+        $data['titleTag'] = \in_array($titleTag, self::TITLE_TAGS, true) ? $titleTag : 'p';
+        $data['autoplay'] = \count($slides) > 1 && (bool) $params->get('autoplay', 1);
+
         return $data;
     }
 }
